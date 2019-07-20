@@ -1,28 +1,33 @@
 {
-  "name": "lp_solver",
-  "version": "1.0.0",
-  "description": "Lp solver wrapped by a web app. This is the backend server.",
+  "name": "lpsolve_js2.0",
+  "version": "0.1.0",
+  "description": "A backend server that processes requests for solving linear programming optimization problems.",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --exec babel-node src/index.js",
+    "start": "nodemon src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Anthony Yang",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
-    "child_process": "^1.0.2",
     "cors": "^2.8.5",
     "dotenv": "^8.0.0",
     "express": "^4.17.1",
-    "nodeman": "^1.1.2",
+    "javascript-lp-solver": "^0.4.5",
+    "mathjs": "^6.0.3",
     "nodemon": "^1.19.1",
-    "shelljs": "^0.8.3",
-    "uuid": "^3.3.2"
+    "regenerator-runtime": "^0.13.2"
   },
   "devDependencies": {
+    "@babel/cli": "^7.4.4",
     "@babel/core": "^7.4.5",
     "@babel/node": "^7.4.5",
-    "@babel/preset-env": "^7.4.5"
+    "@babel/polyfill": "^7.4.4",
+    "@babel/preset-env": "^7.4.5",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^24.8.0",
+    "babel-preset-env": "^1.7.0",
+    "child_process": "^1.0.2"
   }
 }
