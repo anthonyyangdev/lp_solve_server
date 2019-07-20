@@ -1,0 +1,43 @@
+statement ::= (for | objective | constraint | set) ";"
+
+for ::= "for" variable "=" (variable | number) "to" (variable | number) {", " variable "=" (variable | number) "to" (variable | number)} ":" statement 
+
+objective ::= ("max" | "min" ) [ "imize" ] ":", expression
+
+constraint ::= [ name ] (relation_constraint | range_constraint)
+
+set ::= "set" variable "=" expression
+
+expression ::= {("+" | "-") } (sum | (term | number) ("+" | "-") { ("+" | "-")} expression | number | term) 
+
+sum ::= "sum [" variable "=" (variable | number) "to" (variable | number) "] (" expression ")"
+
+term ::= number variable
+
+number ::= integer | float
+
+integer ::= [0-9] {[0-9]}
+
+float ::= [0-9] "." {[0-9]} | {[0-9]} "." [0-9] {[0-9]}
+
+variable ::= letter { word } [ subscript ]
+
+letter ::= [a-zA-Z]
+
+word ::= [a-zA-Z_0-9]
+
+subscript ::= "_"variable
+
+name ::=  letter { word } ":"
+
+relation_constraint ::= expression relation expression
+
+range_constraint ::= expression increasing expression increasing expression | expression decreasing expression decreasing expression
+
+relation ::= increasing | decreasing | equal
+
+increasing ::= "<" | "<="
+
+decreasing ::= ">" | ">="
+
+equal ::= "="
