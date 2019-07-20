@@ -1,43 +1,36 @@
 statement ::= (for | objective | constraint | set) ";"
 
-for ::= "for" variable "=" (variable | number) "to" (variable | number) {", " variable "=" (variable | number) "to" (variable | number)} ":" statement 
+for ::= "for" for_assign {", " for_assign} ":" statement 
+iteration_assign ::= variable "=" (variable | number) "to" (variable | number)
 
 objective ::= ("max" | "min" ) [ "imize" ] ":", expression
 
-constraint ::= [ name ] (relation_constraint | range_constraint)
-
-set ::= "set" variable "=" expression
-
-expression ::= {("+" | "-") } (sum | (term | number) ("+" | "-") { ("+" | "-")} expression | number | term) 
-
-sum ::= "sum [" variable "=" (variable | number) "to" (variable | number) "] (" expression ")"
-
-term ::= number variable
-
-number ::= integer | float
-
-integer ::= [0-9] {[0-9]}
-
-float ::= [0-9] "." {[0-9]} | {[0-9]} "." [0-9] {[0-9]}
-
-variable ::= letter { word } [ subscript ]
-
-letter ::= [a-zA-Z]
-
-word ::= [a-zA-Z_0-9]
-
-subscript ::= "_"variable
-
+constraint ::= [ name ":"] (relation_constraint | range_constraint)
 name ::=  letter { word } ":"
 
+set ::= "set" assign {"," assign}
+assign ::= variable "=" expression
+
+expression ::= {("+" | "-")} (sum | term ("+" | "-") expression | term)
+sum ::= "sum [" iteration_assign "] (" expression ")"
+
+term ::= number [variable]
+number ::= integer | float
+variable ::= letter { word } [ subscript ]
+
 relation_constraint ::= expression relation expression
+range_constraint ::= increasing | decreasing
 
-range_constraint ::= expression increasing expression increasing expression | expression decreasing expression decreasing expression
+increasing ::= expression less_than expression less_than expression
+decreasing ::= expression greater_than expression greater_than expression
 
-relation ::= increasing | decreasing | equal
+relation ::= less_than | greater_than | equal
 
+integer ::= [0-9] {[0-9]}
+float ::= [0-9] "." {[0-9]} | {[0-9]} "." [0-9] {[0-9]}
+letter ::= [a-zA-Z]
+word ::= [a-zA-Z_0-9]
+subscript ::= "_"variable
 increasing ::= "<" | "<="
-
 decreasing ::= ">" | ">="
-
 equal ::= "="
