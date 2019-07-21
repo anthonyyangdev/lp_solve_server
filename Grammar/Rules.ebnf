@@ -1,6 +1,6 @@
 statement ::= (for | objective | constraint | set) ";"
 
-for ::= "for" for_assign {", " for_assign} ":" statement 
+for ::= "for" iteration_assign {", " iteration_assign} ":" statement 
 iteration_assign ::= variable "=" (variable | number) "to" (variable | number)
 
 objective ::= ("max" | "min" ) [ "imize" ] ":", expression
@@ -12,7 +12,7 @@ set ::= "set" assign {"," assign}
 assign ::= variable "=" expression
 
 expression ::= {("+" | "-")} (sum | term ("+" | "-") expression | term)
-sum ::= "sum [" iteration_assign "] (" expression ")"
+sum ::= "sum" "[" iteration_assign "] (" expression ")"
 
 term ::= number [variable]
 number ::= integer | float
@@ -31,6 +31,6 @@ float ::= [0-9] "." {[0-9]} | {[0-9]} "." [0-9] {[0-9]}
 letter ::= [a-zA-Z]
 word ::= [a-zA-Z_0-9]
 subscript ::= "_"variable
-increasing ::= "<" | "<="
-decreasing ::= ">" | ">="
+less_than ::= "<" | "<="
+greater_than ::= ">" | ">="
 equal ::= "="
