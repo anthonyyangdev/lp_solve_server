@@ -1,47 +1,58 @@
-const StringBuilder = require('../StringBuilder/StringBuilder')
-const Tokens = require('./Tokens')
-
-function Tokenizer(input) {
-  const currentString = new StringBuilder()
-  const tokens = [[]]
-  let row = 0
-  let position = 0
-  const blank = /\s/
-
-  function validate(currentString) {
-    const validToken = Tokens.getPossibleToken(currentString.toString())
-    if (validToken) {
-      if (validToken === Tokens.semi_colon) {
-        tokens[++row] = []
-        position = 0
-      } else {
-        tokens[row][position++] = {
-          ...validToken,
-          literal: currentString.toString()
-        }
+var __assign = (this && this.__assign) || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+      for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+        t[p] = s[p];
+    }
+    return t;
+  };
+  return __assign.apply(this, arguments);
+};
+var StringBuilder = require('../StringBuilder/StringBuilder');
+var Tokens = require('./Tokens');
+var Tokenizer = /** @class */ (function () {
+  function Tokenizer(input) {
+    this.tokens = [];
+    this.traverselPosition = 0;
+    var currentString = new StringBuilder();
+    var tokens = [];
+    var position = 0;
+    var blank = /\s/;
+    function validate(currentString) {
+      var validToken = Tokens.getPossibleToken(currentString.toString());
+      if (validToken) {
+        tokens[position++] = __assign({}, validToken, { literal: currentString.toString() });
       }
+      currentString.clear();
     }
-    currentString.clear()
+    for (var i = 0; i < input.length; i++) {
+      var value = input[i];
+      if (blank.test(value)) {
+        continue;
+      }
+      currentString.append(value);
+      if (Tokens.tokenException(currentString.toString(), value, input[i + 1])) {
+        continue;
+      }
+      validate(currentString);
+    }
+    if (currentString.size() > 0)
+      validate(currentString);
+    this.tokens = tokens;
   }
-
-  for (let i = 0; i < input.length; i++) {
-    const value = input[i]
-    if (blank.test(value)) {
-      continue
+  Tokenizer.prototype.peek = function () {
+    if (this.traverselPosition === this.tokens.length) {
+      throw new Error('There are no more tokens.');
     }
-    currentString.append(value)
-    if (Tokens.tokenException(currentString.toString(), value, input[i + 1])) {
-      continue
-    }
-    validate(currentString)
-  }
-  if (currentString.size() > 0)
-    validate(currentString)
-
-  return tokens
-}
-
-// const result = new Tokenizer('max: sum [i = 5 to 10] (x_i + sum [j = 3 to 6] (y_ij)); for i = 1 to 5: x_i <= 3; y <= 32;')
-// console.log(result)
-
-module.exports = Tokenizer
+    return this.tokens[this.traverselPosition];
+  };
+  Tokenizer.prototype.poll = function () {
+    return this.tokens[this.traverselPosition++];
+  };
+  Tokenizer.prototype.hasNext = function () {
+    return this.tokens[this.traverselPosition] !== undefined;
+  };
+  return Tokenizer;
+}());
+module.exports = Tokenizer;

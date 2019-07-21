@@ -1,34 +1,24 @@
-
-function StringBuilder() {
-  var pointer = 0
-  var string_array = []
-
-  function append(char) {
-    for (let i = 0; i < char.length; i++) {
-      string_array[pointer] = char[i]
-      pointer++
+var StringBuilder = /** @class */ (function () {
+    function StringBuilder() {
+        this.pointer = 0;
+        this.string_array = [];
     }
-  }
-
-  function toString() {
-    return string_array.join('')
-  }
-
-  function clear() {
-    pointer = 0
-    string_array = []
-  }
-
-  function size() {
-    return pointer
-  }
-
-  return {
-    append,
-    toString,
-    clear,
-    size
-  }
-}
-
-module.exports = StringBuilder
+    StringBuilder.prototype.append = function (char) {
+        for (var i = 0; i < char.length; i++) {
+            this.string_array[this.pointer] = char[i];
+            this.pointer++;
+        }
+    };
+    StringBuilder.prototype.toString = function () {
+        return this.string_array.join('');
+    };
+    StringBuilder.prototype.clear = function () {
+        this.pointer = 0;
+        this.string_array = [];
+    };
+    StringBuilder.prototype.size = function () {
+        return this.pointer;
+    };
+    return StringBuilder;
+}());
+module.exports = StringBuilder;

@@ -202,5 +202,6 @@ function getPossibleToken(input) {
 module.exports = {
   tokenException,
   getPossibleToken,
-  ...TOKENS
+  ...TOKENS,
+  TYPES
 }
