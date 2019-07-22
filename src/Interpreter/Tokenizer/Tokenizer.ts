@@ -1,24 +1,34 @@
-const StringBuilder = require('../StringBuilder/StringBuilder')
-const Tokens = require('./Tokens')
+import _StringBuilder = require('../StringBuilder/StringBuilder')
+type StringBuilder = _StringBuilder.default
+const StringBuilder = _StringBuilder.default
+
+import _Tokens = require('./Tokens')
+const Tokens = _Tokens.default
+
+import _TOKEN = require('./Token')
+type Token = _TOKEN.default
+const Token = _TOKEN.default
 
 class Tokenizer {
 
-  private tokens = []
+  private tokens: Token[] = []
   private traverselPosition = 0
+  private lineCount = 1
+  private tokenPosition = 1
 
-  constructor(input) {
+  constructor(input: string) {
     const currentString = new StringBuilder()
-    const tokens = []
+    const tokens: Token[] = []
     let position = 0
     const blank = /\s/
 
-    function validate(currentString) {
+    function validate(currentString: StringBuilder) {
       const validToken = Tokens.getPossibleToken(currentString.toString())
       if (validToken) {
-        tokens[position++] = {
+        tokens[position++] = new Token({
           ...validToken,
           literal: currentString.toString()
-        }
+        })
       }
       currentString.clear()
     }
@@ -47,7 +57,17 @@ class Tokenizer {
     return this.tokens[this.traverselPosition]
   }
 
+  /**
+   * @returns {Token}
+   */
   public poll() {
+    const current = this.tokens[this.traverselPosition++]
+    if (current.getType === Tokens.TYPES.SemiColon) {
+      this.lineCount++
+      this.tokenPosition = 1
+    } else {
+      this.tokenPosition++
+    }
     return this.tokens[this.traverselPosition++]
   }
 
@@ -55,6 +75,20 @@ class Tokenizer {
     return this.tokens[this.traverselPosition] !== undefined
   }
 
+  public clone() {
+    return this.tokens.map(x => x.clone())
+  }
+
+  public getCurrentPosition() {
+    return {
+      line: this.lineCount,
+      column: this.tokenPosition
+    }
+  }
+
+  public static getType(token: Token) {
+    return token.getType()
+  }
 }
 
-module.exports = Tokenizer
+export default Tokenizer

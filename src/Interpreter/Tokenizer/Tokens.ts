@@ -1,4 +1,4 @@
-const TYPES = {
+const TYPES: any = {
   Objective: undefined,
   For: undefined,
   To: undefined,
@@ -24,12 +24,12 @@ const TYPES = {
   GT: undefined,
 }
 
-const keys = Object.keys(TYPES)
-for (let i = 1; i <= keys.length; i++) {
-  TYPES[keys[i - 1]] = i
+let count = 1
+for (let i in TYPES) {
+  TYPES[i] = count++
 }
 
-const TOKENS = {
+const TOKENS: any = {
   maximize: {
     value: 'max',
     regex: /maximize/,
@@ -147,7 +147,7 @@ const TOKENS = {
   }
 }
 
-const CHAR_TOKEN = {
+const CHAR_TOKEN: any = {
   relation: {
     value: 'relation',
     regex: /[><]/
@@ -190,8 +190,7 @@ const NUMBER_TOKEN = {
 const ExceptionTokens = {
 }
 
-function tokenException(total, current, next) {
-
+function tokenException(total: string, current: string, next: string) {
   // If it is <= or >=
   const currentIsRelationHead = /[><]/.test(current)
   const nextIsEqual = /\=/.test(next)
@@ -211,11 +210,7 @@ function tokenException(total, current, next) {
   return currentIsWordNum && nextIsWordNum
 }
 
-/**
- * 
- * @param {string} input 
- */
-function getPossibleToken(input) {
+function getPossibleToken(input: string) {
   for (const c in TOKENS) {
     if (TOKENS[c].regex.test(input))
       return TOKENS[c]
@@ -223,7 +218,7 @@ function getPossibleToken(input) {
   return null
 }
 
-module.exports = {
+export default {
   tokenException,
   getPossibleToken,
   ...TOKENS,

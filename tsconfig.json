@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "baseUrl": ".",
+    "rootDir": "src",
+    "outDir": "lib",
+    "declaration": true,
+    "strict": true,
+    "jsx": "react",
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "paths": {
+      "*": [
+        "node_modules/@types/*",
+        "*"
+      ]
+    },
+    "esModuleInterop": true
+  },
+  "include": [
+    "src"
+  ]
+}

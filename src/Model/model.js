@@ -1,9 +1,11 @@
 module.exports = function Model() {
   return {
-    opType: null,
     optimize: '_obj',
+    objective: {
+      opType: undefined,
+      expression: undefined
+    },
     constraints: {},
-    variables: {},
     env: {},
     constraintCount: 0
   }

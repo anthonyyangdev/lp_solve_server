@@ -1,8 +1,8 @@
 class StringBuilder {
   private pointer = 0
-  private string_array = []
+  private string_array: string[] = []
 
-  public append(char) {
+  public append(char: string) {
     for (let i = 0; i < char.length; i++) {
       this.string_array[this.pointer] = char[i]
       this.pointer++
@@ -23,4 +23,4 @@ class StringBuilder {
   }
 }
 
-module.exports = StringBuilder
+export default StringBuilder
