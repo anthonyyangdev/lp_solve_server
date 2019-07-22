@@ -1,13 +1,7 @@
-import _StringBuilder = require('../StringBuilder/StringBuilder')
-type StringBuilder = _StringBuilder.default
-const StringBuilder = _StringBuilder.default
-
-import _Tokens = require('./Tokens')
-const Tokens = _Tokens.default
-
-import _TOKEN = require('./Token')
-type Token = _TOKEN.default
-const Token = _TOKEN.default
+import StringBuilder from '../../StringBuilder/StringBuilder'
+import TokenFunction from './TokensFunction'
+import TYPES from './TokenType'
+import Token from './Token'
 
 class Tokenizer {
 
@@ -23,7 +17,7 @@ class Tokenizer {
     const blank = /\s/
 
     function validate(currentString: StringBuilder) {
-      const validToken = Tokens.getPossibleToken(currentString.toString())
+      const validToken = TokenFunction.getPossibleToken(currentString.toString())
       if (validToken) {
         tokens[position++] = new Token({
           ...validToken,
@@ -31,15 +25,16 @@ class Tokenizer {
         })
       }
       currentString.clear()
-    }
+    } 
 
     for (let i = 0; i < input.length; i++) {
       const value = input[i]
       if (blank.test(value)) {
         continue
       }
+      const prev = currentString.toString()
       currentString.append(value)
-      if (Tokens.tokenException(currentString.toString(), value, input[i + 1])) {
+      if (TokenFunction.tokenException(prev, value, input[i + 1])) {
         continue
       }
       validate(currentString)
@@ -62,13 +57,13 @@ class Tokenizer {
    */
   public poll() {
     const current = this.tokens[this.traverselPosition++]
-    if (current.getType === Tokens.TYPES.SemiColon) {
+    if (current.getType() === TYPES.SemiColon) {
       this.lineCount++
       this.tokenPosition = 1
     } else {
       this.tokenPosition++
     }
-    return this.tokens[this.traverselPosition++]
+    return current
   }
 
   public hasNext() {

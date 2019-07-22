@@ -2,7 +2,7 @@ export default class Token {
   private value: string
   private regex: RegExp
   private literal: string
-  private type: number | string
+  private type: number
 
   constructor(token: any) {
     this.value = token.value

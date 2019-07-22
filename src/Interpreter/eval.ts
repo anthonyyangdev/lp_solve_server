@@ -1,26 +1,9 @@
-import _Tokenizer = require('./Tokenizer/Tokenizer')
-type Tokenizer = _Tokenizer.default
-const Tokenizer = _Tokenizer.default
-
-import _Tokens = require('./Tokenizer/Tokens')
-const Tokens = _Tokens.default
-const TYPES = Tokens.TYPES
-
-import _IterationModel = require('../Model/IterationModel')
-type IterationModel = _IterationModel.default
-const IterationModel = _IterationModel.default
-
-import _StringBuilder = require('./StringBuilder/StringBuilder')
-type StringBuilder = _StringBuilder.default
-const StringBuilder = _StringBuilder.default
-
-import _Token = require('./Tokenizer/Token')
-type Token = _Token.default
-const Token = _Token.default
-
-import _Model = require('../Model/Model')
-type Model = _Model.default
-const Model = _Model.default
+import Tokenizer from './Tokenizer/Tokenizer'
+import TokenType from './Tokenizer/TokenType'
+import IterationModel from '../Model/IterationModel'
+import StringBuilder from '../StringBuilder/StringBuilder'
+import Token from './Tokenizer/Token'
+import Model from '../Model/Model'
 
 class Eval {
 
@@ -29,7 +12,7 @@ class Eval {
    * @param {Token} actual
    * @param {Tokenizer} stream 
    */
-  private errorMsg(expected: Token, actual: Token, stream: Tokenizer) {
+  private errorMsg(expected: TokenType, actual: Token, stream: Tokenizer) {
     const positions = stream.getCurrentPosition()
     const actualLiteral = actual.getLiteral()
     const row = positions.line
@@ -74,20 +57,20 @@ class Eval {
     let builder = new StringBuilder()
 
     const parse = (current: Token, builder: StringBuilder, stream: Tokenizer) => {
-      switch (current) {
-        case TYPES.Word:
+      switch (current.getType()) {
+        case TokenType.Word:
           const word = this.parseVariable(current)
           builder.append(word)
           break
-        case TYPES.Number:
+        case TokenType.Number:
           const number = this.parseNumber(current)
           builder.append(number)
           break
-        case TYPES.MathOperator:
+        case TokenType.MathOperator:
           const operator = this.parseOperator(current)
           builder.append(operator)
           break
-        case TYPES.Sum:
+        case TokenType.Sum:
           const result = this.parseExpression(current, stream)
           builder.append(result.expr)
           stream = result.stream
@@ -125,16 +108,16 @@ class Eval {
    */
   private parseSum(TOKEN_STREAM: Tokenizer) {
     const expected = [
-      TYPES.LBRACKET,
-      TYPES.Word,
-      TYPES.Equal,
-      TYPES.Expr,
-      TYPES.To,
-      TYPES.Expr,
-      TYPES.RBRACKET,
-      TYPES.LPAREN,
-      TYPES.Expr,
-      TYPES.RPAREN,
+      TokenType.LBRACKET,
+      TokenType.Word,
+      TokenType.Equal,
+      TokenType.Expr,
+      TokenType.To,
+      TokenType.Expr,
+      TokenType.RBRACKET,
+      TokenType.LPAREN,
+      TokenType.Expr,
+      TokenType.RPAREN,
     ]
 
     let sumModel = new IterationModel()
@@ -144,11 +127,11 @@ class Eval {
         throw new Error('There are no more tokens.')
       const now = TOKEN_STREAM.poll()
       switch (s) {
-        case TYPES.Word:
+        case TokenType.Word:
           const word = this.parseVariable(now)
           sumModel.addVariable(word)
           break
-        case TYPES.Expr:
+        case TokenType.Expr:
           const { expr, stream } = this.parseExpression(now, TOKEN_STREAM)
           sumModel.addExpr(expr)
           TOKEN_STREAM = stream
@@ -179,7 +162,7 @@ class Eval {
     const current_type = current.getType()
 
     switch (current_type) {
-      case TYPES.Sum:
+      case TokenType.Sum:
         const { expr, stream } = this.parseSum(TOKEN_STREAM)
         TOKEN_STREAM = stream
         // Do something with expression and add to model
@@ -189,7 +172,6 @@ class Eval {
       model,
       TOKEN_STREAM
     }
-
   }
 
 
@@ -206,7 +188,7 @@ class Eval {
       model = result.model
       TOKEN_STREAM = result.TOKEN_STREAM
     }
-    model
+    return model
   }
 }
 

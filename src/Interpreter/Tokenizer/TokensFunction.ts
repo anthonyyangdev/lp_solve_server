@@ -1,33 +1,4 @@
-const TYPES: any = {
-  Objective: undefined,
-  For: undefined,
-  To: undefined,
-  Statement: undefined,
-  Expr: undefined,
-  Sum: undefined,
-  Misc: undefined,
-  SemiColon: undefined,
-  Character: undefined,
-  Colon: undefined,
-  Number: undefined,
-  MathOperator: undefined,
-  Relation: undefined,
-  LPAREN: undefined,
-  RPAREN: undefined,
-  LBRACKET: undefined,
-  RBRACKET: undefined,
-  Word: undefined,
-  Equal: undefined,
-  GTE: undefined,
-  LTE: undefined,
-  LT: undefined,
-  GT: undefined,
-}
-
-let count = 1
-for (let i in TYPES) {
-  TYPES[i] = count++
-}
+import TYPES from './TokenType'
 
 const TOKENS: any = {
   maximize: {
@@ -67,13 +38,13 @@ const TOKENS: any = {
   },
   number: {
     value: 'number',
-    regex: /\d/,
+    regex: /\d|\./,
     type: TYPES.Number
   },
-  point: {
-    value: 'point',
-    regex: /\./,
-    type: TYPES.Character
+  set: {
+    value: 'set',
+    regex: /set/,
+    type: TYPES.Set
   },
   word: {
     value: 'word',
@@ -187,10 +158,8 @@ const NUMBER_TOKEN = {
   }
 }
 
-const ExceptionTokens = {
-}
-
 function tokenException(total: string, current: string, next: string) {
+  // console.table([total, current, next])
   // If it is <= or >=
   const currentIsRelationHead = /[><]/.test(current)
   const nextIsEqual = /\=/.test(next)
@@ -198,15 +167,15 @@ function tokenException(total: string, current: string, next: string) {
     return true
 
   // If is forms a coefficient of a variable
-  const prevIsNumber = /\d|\s*/.test(total)
-  const currentIsNumber = /\d|\./.test(total)
-  const nextIsLetter = CHAR_TOKEN.letter.regex.test(next)
-  if (prevIsNumber && currentIsNumber && nextIsLetter)
-    return false
+  const prevIsNumber = /^([0-9]|\.)*$/.test(total)
+  const currentIsNumber = /[0-9]|\./.test(current)
+  const nextIsNumber = /[0-9]|\./.test(next)
+  if (prevIsNumber && currentIsNumber)
+    return nextIsNumber
 
   // If it possibly forms a word/keyword
-  const currentIsWordNum = CHAR_TOKEN.word_number.regex.test(current)
-  const nextIsWordNum = CHAR_TOKEN.word_number.regex.test(next)
+  const currentIsWordNum = /\w/.test(current)
+  const nextIsWordNum = /\w/.test(next)
   return currentIsWordNum && nextIsWordNum
 }
 
@@ -221,6 +190,4 @@ function getPossibleToken(input: string) {
 export default {
   tokenException,
   getPossibleToken,
-  ...TOKENS,
-  TYPES
 }
