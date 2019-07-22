@@ -6,7 +6,6 @@ import Token from './Tokenizer/Token'
 import Model from '../Model/Model'
 
 class Eval {
-
   /**
    * @param {Token} expected 
    * @param {Token} actual
@@ -20,7 +19,7 @@ class Eval {
     return `Expected ${expected} but encountered ${actualLiteral} at line ${row}, word ${col}`
   }
 
-  private parseNumber(current: Token) {
+  protected parseNumber(current: Token) {
     const number = current.getLiteral().trim()
     const regex = /^(([0-9]*\.[0-9]+)|([0-9]+\.?))$/
     if (regex.test(number)) {
@@ -33,7 +32,7 @@ class Eval {
   /**
    * @param {Token} current 
    */
-  private parseVariable(current: Token) {
+  protected parseVariable(current: Token) {
     const word = current.getLiteral().trim()
     const regex = /[a-zA-Z]\w*/
     if (regex.test(word)) {
@@ -53,11 +52,13 @@ class Eval {
       throw new SyntaxError(`The operator ${operator} is not valid.`)
   }
 
-  private parseExpression(current: Token, stream: Tokenizer) {
+  protected parseExpression(stream: Tokenizer) {
     let builder = new StringBuilder()
-
-    const parse = (current: Token, builder: StringBuilder, stream: Tokenizer) => {
-      switch (current.getType()) {
+    let end = false
+    while (!end && stream.hasNext()) {
+      let current = stream.peek()
+      const type = current.getType()
+      switch (type) {
         case TokenType.Word:
           const word = this.parseVariable(current)
           builder.append(word)
@@ -71,32 +72,28 @@ class Eval {
           builder.append(operator)
           break
         case TokenType.Sum:
-          const result = this.parseExpression(current, stream)
+          const result = this.parseSum(stream)
           builder.append(result.expr)
           stream = result.stream
           break
+        case TokenType.LPAREN:
+          stream.pop()
+          const inner = this.parseExpression(stream)
+          builder.append(inner.expr)
+          stream = inner.stream
+          break
+        case TokenType.RPAREN:
         default:
-          throw new Error(`Found a invalid term in what was expected to be an expression: ${current}`)
+          end = true
       }
-      return {
-        builder,
-        stream
+      if (!end) {
+        stream.pop()
       }
     }
 
-    let result = parse(current, builder, stream)
-    builder = result.builder
-    stream = result.stream
-
-    while (stream.hasNext()) {
-      current = stream.poll()
-      result = parse(current, builder, stream)
-      builder = result.builder
-      stream = result.stream
-    }
-
+    const expr = builder.toString()
     return {
-      expr: builder.toString(),
+      expr,
       stream
     }
   }
@@ -125,18 +122,20 @@ class Eval {
     for (const s of expected) {
       if (!TOKEN_STREAM.hasNext())
         throw new Error('There are no more tokens.')
-      const now = TOKEN_STREAM.poll()
+      let now = undefined
       switch (s) {
         case TokenType.Word:
+          now = TOKEN_STREAM.poll()
           const word = this.parseVariable(now)
           sumModel.addVariable(word)
           break
         case TokenType.Expr:
-          const { expr, stream } = this.parseExpression(now, TOKEN_STREAM)
+          const { expr, stream } = this.parseExpression(TOKEN_STREAM)
           sumModel.addExpr(expr)
           TOKEN_STREAM = stream
           break
         default:
+          now = TOKEN_STREAM.poll()
           if (now.getType() !== s)
             throw new Error(this.errorMsg(s, now, TOKEN_STREAM))
           break

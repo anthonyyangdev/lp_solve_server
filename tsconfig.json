@@ -12,6 +12,7 @@
     "noImplicitThis": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
+    "experimentalDecorators": true,
     "paths": {
       "*": [
         "node_modules/@types/*",

@@ -2,8 +2,6 @@ class StringBuilder {
   private pointer = 0
   private string_array: string[] = []
 
-  constructor() { }
-
   public append(char: string) {
     for (let i = 0; i < char.length; i++) {
       this.string_array[this.pointer] = char[i]

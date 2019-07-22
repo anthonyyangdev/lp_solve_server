@@ -25,7 +25,7 @@ class Tokenizer {
         })
       }
       currentString.clear()
-    } 
+    }
 
     for (let i = 0; i < input.length; i++) {
       const value = input[i]
@@ -64,6 +64,16 @@ class Tokenizer {
       this.tokenPosition++
     }
     return current
+  }
+
+  public pop() {
+    const current = this.tokens[++this.traverselPosition]
+    if (current.getType() === TYPES.SemiColon) {
+      this.lineCount++
+      this.tokenPosition = 1
+    } else {
+      this.tokenPosition++
+    }
   }
 
   public hasNext() {

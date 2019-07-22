@@ -3,48 +3,48 @@ import TYPES from './TokenType'
 const TOKENS: any = {
   maximize: {
     value: 'max',
-    regex: /maximize/,
+    regex: /^maximize$/,
     type: TYPES.Objective
   },
   minimize: {
     value: 'min',
-    regex: /minimize/,
+    regex: /^minimize$/,
     type: TYPES.Objective
   },
   max: {
     value: 'max',
-    regex: /max/,
+    regex: /^max$/,
     type: TYPES.Objective
   },
   min: {
     value: 'min',
-    regex: /min/,
+    regex: /^min$/,
     type: TYPES.Objective
   },
   for: {
     value: 'for',
-    regex: /for/,
+    regex: /^for$/,
     type: TYPES.Statement
   },
   to: {
     value: 'to',
-    regex: /to/,
+    regex: /^to$/,
     type: TYPES.To
   },
   sum: {
     value: 'sum',
-    regex: /sum/,
+    regex: /^sum$/,
     type: TYPES.Sum
-  },
-  number: {
-    value: 'number',
-    regex: /\d|\./,
-    type: TYPES.Number
   },
   set: {
     value: 'set',
-    regex: /set/,
+    regex: /^set$/,
     type: TYPES.Set
+  },
+  number: {
+    value: 'number',
+    regex: /^\d|\.$/,
+    type: TYPES.Number
   },
   word: {
     value: 'word',
@@ -53,67 +53,67 @@ const TOKENS: any = {
   },
   plus: {
     value: 'plus',
-    regex: /\+/,
+    regex: /^\+$/,
     type: TYPES.MathOperator
   },
   minus: {
     value: 'minus',
-    regex: /\-/,
+    regex: /^\-$/,
     type: TYPES.MathOperator
   },
   LTE: {
     value: 'less-than-equal',
-    regex: /<=/,
+    regex: /^<=$/,
     type: TYPES.LTE
   },
   GTE: {
     value: 'greater-than-equal',
-    regex: />=/,
+    regex: /^>=$/,
     type: TYPES.GTE
   },
   LT: {
     value: 'less-than',
-    regex: /</,
+    regex: /^<$/,
     type: TYPES.LT
   },
   GT: {
     value: 'greater-than-equal',
-    regex: />/,
+    regex: /^>$/,
     type: TYPES.GTE
   },
   equal: {
     value: 'equal',
-    regex: /=/,
+    regex: /^=$/,
     type: TYPES.Equal
   },
   left_paren: {
     value: 'left-paren',
-    regex: /\(/,
+    regex: /^\($/,
     type: TYPES.LPAREN,
   },
   right_paren: {
     value: 'right-paren',
-    regex: /\)/,
+    regex: /^\)$/,
     type: TYPES.RPAREN
   },
   left_bracket: {
     value: 'left-bracket',
-    regex: /\[/,
+    regex: /^\[$/,
     type: TYPES.LBRACKET
   },
   right_bracket: {
     value: 'right-bracket',
-    regex: /\]/,
+    regex: /^\]$/,
     type: TYPES.RBRACKET
   },
   semi_colon: {
     value: 'semi-colon',
-    regex: /\;/,
+    regex: /^\;$/,
     type: TYPES.SemiColon
   },
   colon: {
     value: 'colon',
-    regex: /\:/,
+    regex: /^\:$/,
     type: TYPES.Colon
   }
 }

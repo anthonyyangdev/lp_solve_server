@@ -1,9 +1,5 @@
-import _Model = require('../Model/model')
-type Model = _Model.default
-const Model = _Model.default
-
-import _Eval = require('./Eval')
-const Eval = _Eval.default
+import Model from '../Model/model'
+import Eval from './Eval'
 
 /**
  * @param {string[]} content 
