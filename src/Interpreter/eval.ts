@@ -103,8 +103,9 @@ class Eval {
    * @param {Tokenizer} TOKEN_STREAM
    * @param {string}
    */
-  private parseSum(TOKEN_STREAM: Tokenizer) {
+  protected parseSum(TOKEN_STREAM: Tokenizer) {
     const expected = [
+      TokenType.Sum,
       TokenType.LBRACKET,
       TokenType.Word,
       TokenType.Equal,
@@ -143,10 +144,10 @@ class Eval {
     }
 
     // Transform sum model into an expression
-
     return {
       expr,
-      stream: TOKEN_STREAM
+      stream: TOKEN_STREAM,
+      sumModel
     }
 
   }
@@ -159,7 +160,6 @@ class Eval {
    */
   private parseToken(current: Token, model: Model, TOKEN_STREAM: Tokenizer) {
     const current_type = current.getType()
-
     switch (current_type) {
       case TokenType.Sum:
         const { expr, stream } = this.parseSum(TOKEN_STREAM)
@@ -182,7 +182,7 @@ class Eval {
   public eval(line: string, model: Model) {
     let TOKEN_STREAM = new Tokenizer(line)
     while (TOKEN_STREAM.hasNext()) {
-      const current = TOKEN_STREAM.poll()
+      const current = TOKEN_STREAM.peek()
       const result = this.parseToken(current, model, TOKEN_STREAM)
       model = result.model
       TOKEN_STREAM = result.TOKEN_STREAM

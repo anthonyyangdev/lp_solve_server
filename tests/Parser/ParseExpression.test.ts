@@ -1,6 +1,5 @@
 import { expect } from 'chai';
 import Eval from '../../src/Interpreter/Eval'
-import TYPES from '../../src/Interpreter/Tokenizer/TokenType'
 import Tokenizer from '../../src/Interpreter/Tokenizer/Tokenizer';
 import 'mocha'
 
@@ -72,7 +71,6 @@ class Tester extends Eval {
           if (result.hasNext()) {
             const r = this.parseExpression(result)
             expect(r.expr).to.equal(expected)
-            // expect(r.stream.peek().getLiteral()).to.equal(';')
           }
         });
       });

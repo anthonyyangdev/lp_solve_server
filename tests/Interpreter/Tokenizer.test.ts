@@ -45,6 +45,9 @@ const tests = [
   }, {
     input: 'for x = 1 to 5: y_x + z_x = 12',
     expected: ['for', 'x', '=', '1', 'to', '5', ':', 'y_x', '+', 'z_x', '=', '12']
+  }, {
+    input: 'for x = 1 to 3x + 5: y_x + z_x = 12',
+    expected: ['for', 'x', '=', '1', 'to', '3', 'x', '+', '5', ':', 'y_x', '+', 'z_x', '=', '12']
   },
 ]
 
