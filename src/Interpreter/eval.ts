@@ -6,6 +6,7 @@ import Token from './Tokenizer/Token'
 import Model from '../Model/Model'
 import SetModel from '../Model/SetModel';
 import ObjectiveModel from '../Model/ObjectiveModel';
+import TypeDeclareModel from '../Model/TypeDeclareModel';
 
 class Eval {
   /**
@@ -231,6 +232,53 @@ class Eval {
     return model
   }
 
+  protected parseTypeDeclaration(stream: Tokenizer, model: Model) {
+
+    const typeDeclareModel = new TypeDeclareModel()
+
+    const possibleType = stream.poll()
+    if (possibleType.getType() === TokenType.VariableType) {
+      typeDeclareModel.addType(possibleType.getLiteral())
+    } else {
+      throw new Error(`Was expecting a type declaration but received ${possibleType.getType()} instead.`)
+    }
+
+    const possibleValue = stream.poll()
+    if (possibleValue.getType() === TokenType.Word) {
+      const word = this.parseVariable(possibleType)
+      typeDeclareModel.addVariable(word)
+    } else {
+      throw new Error(`Was expecting a variable name but received ${possibleType.getType()} instead.`)
+    }
+
+    const expected = [
+      TokenType.Comma,
+      TokenType.Word
+    ]
+    while (stream.peek().getType() !== TokenType.SemiColon) {
+      for (const s of expected) {
+        if (!stream.hasNext())
+          throw new Error('There are no more tokens.')
+        let now = undefined
+        switch (s) {
+          case TokenType.Word:
+            now = stream.poll()
+            const name = this.parseVariable(now)
+            typeDeclareModel.addVariable(name)
+            break
+          default:
+            now = stream.poll()
+            if (now.getType() !== s)
+              throw new Error(this.errorMsg(s, now, stream))
+            break
+        }
+      }
+    }
+
+    model.addTypeDeclaration(typeDeclareModel)
+    return model
+  }
+
   private parseToken(current: Token, model: Model, TOKEN_STREAM: Tokenizer) {
     const current_type = current.getType()
     switch (current_type) {
@@ -244,6 +292,9 @@ class Eval {
         break
       case TokenType.Objective:
         model = this.parseObjective(TOKEN_STREAM, model)
+        break
+      case TokenType.VariableType:
+        model = this.parseTypeDeclaration(TOKEN_STREAM, model)
         break
     }
     return {

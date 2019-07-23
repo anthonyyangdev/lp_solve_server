@@ -56,6 +56,11 @@ const TOKENS: any = {
     regex: /^bin$/,
     type: TYPES.VariableType
   },
+  comma: {
+    value: ',',
+    regex: /^\,$/,
+    type: TYPES.Comma
+  },
   number: {
     value: 'number',
     regex: /^([0-9]|\.)*$/,

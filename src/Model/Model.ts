@@ -1,6 +1,7 @@
 import SetModel from './SetModel'
 import { expression } from '@babel/template';
 import ObjectiveModel from './ObjectiveModel';
+import TypeDeclareModel from './TypeDeclareModel';
 
 class Environment {
   private map: any = {}
@@ -84,7 +85,7 @@ class Model {
     throw new Error(`Not implemented: ${objective}`)
   }
 
-  public addTypeDeclaration(declaration: string) {
+  public addTypeDeclaration(declaration: TypeDeclareModel) {
     throw new Error(`Not implemented: ${declaration}`)
   }
 }
