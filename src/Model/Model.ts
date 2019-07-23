@@ -1,3 +1,5 @@
+import SetModel from './SetModel'
+
 class Model {
   private optimize = '_obj'
   private objective = {
@@ -5,8 +7,13 @@ class Model {
     expression: undefined
   }
   private constraints = {}
-  private env = {}
+  private env: any = {}
   private constraintCount = 0
+
+  public addSetVariable(variable: SetModel) {
+    const v = variable.getValues()
+    this.env[v.name] = v.value
+  }
 
   public addRelationConstraint(expr: string) {
     throw new Error(`Not implemented: ${expr}`)

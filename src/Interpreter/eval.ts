@@ -4,6 +4,7 @@ import IterationModel from '../Model/IterationModel'
 import StringBuilder from '../StringBuilder/StringBuilder'
 import Token from './Tokenizer/Token'
 import Model from '../Model/Model'
+import SetModel from 'src/Model/SetModel';
 
 class Eval {
   /**
@@ -152,6 +153,42 @@ class Eval {
 
   }
 
+  protected parseSet(stream: Tokenizer, model: Model) {
+    const expected = [
+      TokenType.Set,
+      TokenType.Word,
+      TokenType.Equal,
+      TokenType.Expr,
+    ]
+
+    const variable = new SetModel()
+
+    for (const s of expected) {
+      if (!stream.hasNext())
+        throw new Error('There are no more tokens.')
+      let now = undefined
+      switch (s) {
+        case TokenType.Word:
+          now = stream.poll()
+          const word = this.parseVariable(now)
+          variable.addName(word)
+          break
+        case TokenType.Expr:
+          const res = this.parseExpression(stream)
+          stream = res.stream
+          variable.addValue(res.expr)
+          break
+        default:
+          now = stream.poll()
+          if (now.getType() !== s)
+            throw new Error(this.errorMsg(s, now, stream))
+          break
+      }
+    }
+
+    model.addSetVariable(variable)
+    return model
+  }
 
   /**
    * @param {Token} current 
@@ -165,6 +202,9 @@ class Eval {
         const { expr, stream } = this.parseSum(TOKEN_STREAM)
         TOKEN_STREAM = stream
         // Do something with expression and add to model
+        break
+      case TokenType.Set:
+        model = this.parseSet(TOKEN_STREAM, model)
         break
     }
     return {
