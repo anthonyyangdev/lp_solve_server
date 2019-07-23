@@ -22,7 +22,8 @@ enum TYPES {
   LTE,
   LT,
   GT,
-  Set
+  Set,
+  VariableType
 }
 
 export default TYPES

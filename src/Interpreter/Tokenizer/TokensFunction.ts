@@ -41,6 +41,21 @@ const TOKENS: any = {
     regex: /^set$/,
     type: TYPES.Set
   },
+  int: {
+    value: 'int',
+    regex: /^int$/,
+    type: TYPES.VariableType
+  },
+  free: {
+    value: 'free',
+    regex: /^free$/,
+    type: TYPES.VariableType
+  },
+  bin: {
+    value: 'bin',
+    regex: /^bin$/,
+    type: TYPES.VariableType
+  },
   number: {
     value: 'number',
     regex: /^([0-9]|\.)*$/,

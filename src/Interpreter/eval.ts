@@ -227,7 +227,6 @@ class Eval {
           break
       }
     }
-
     model.addObjective(objective)
     return model
   }
