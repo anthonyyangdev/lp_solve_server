@@ -24,7 +24,7 @@ const TOKENS: any = {
   for: {
     value: 'for',
     regex: /^for$/,
-    type: TYPES.Statement
+    type: TYPES.For
   },
   to: {
     value: 'to',
@@ -43,7 +43,7 @@ const TOKENS: any = {
   },
   number: {
     value: 'number',
-    regex: /^\d|\.$/,
+    regex: /^([0-9]|\.)*$/,
     type: TYPES.Number
   },
   word: {

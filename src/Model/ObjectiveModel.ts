@@ -1,16 +1,16 @@
-import AbstractModel from "./AbstractModel";
+import AbstractModel from './AbstractModel'
 
-class SetModel extends AbstractModel {
+class ObjectiveModel extends AbstractModel {
 
   private name: string | undefined = undefined
   private value: string | undefined = undefined
 
-  public addName(name: string) {
+  public addObjective(name: string) {
     this.isDefined(this.name)
     this.name = name
   }
 
-  public addValue(value: string) {
+  public addExpression(value: string) {
     this.isDefined(this.value)
     this.value = value
   }
@@ -27,4 +27,4 @@ class SetModel extends AbstractModel {
 
 }
 
-export default SetModel
+export default ObjectiveModel

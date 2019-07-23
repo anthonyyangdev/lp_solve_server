@@ -4,7 +4,8 @@ import IterationModel from '../Model/IterationModel'
 import StringBuilder from '../StringBuilder/StringBuilder'
 import Token from './Tokenizer/Token'
 import Model from '../Model/Model'
-import SetModel from 'src/Model/SetModel';
+import SetModel from '../Model/SetModel';
+import ObjectiveModel from '../Model/ObjectiveModel';
 
 class Eval {
   /**
@@ -191,10 +192,46 @@ class Eval {
   }
 
   /**
-   * @param {Token} current 
-   * @param {*} model 
-   * @param {Tokenizer} TOKEN_STREAM 
+   * @test Needs Testing
+   * @param stream 
+   * @param model 
    */
+  protected parseObjective(stream: Tokenizer, model: Model) {
+    const expected = [
+      TokenType.Objective,
+      TokenType.SemiColon,
+      TokenType.Colon,
+      TokenType.Expr,
+    ]
+
+    const objective = new ObjectiveModel()
+    for (const s of expected) {
+      if (!stream.hasNext())
+        throw new Error('There are no more tokens.')
+      let now = undefined
+      switch (s) {
+        case TokenType.Objective:
+          now = stream.poll()
+          const opType = now.getLiteral()
+          objective.addObjective(opType)
+          break
+        case TokenType.Expr:
+          const res = this.parseExpression(stream)
+          stream = res.stream
+          objective.addExpression(res.expr)
+          break
+        default:
+          now = stream.poll()
+          if (now.getType() !== s)
+            throw new Error(this.errorMsg(s, now, stream))
+          break
+      }
+    }
+
+    model.addObjective(objective)
+    return model
+  }
+
   private parseToken(current: Token, model: Model, TOKEN_STREAM: Tokenizer) {
     const current_type = current.getType()
     switch (current_type) {
@@ -205,6 +242,9 @@ class Eval {
         break
       case TokenType.Set:
         model = this.parseSet(TOKEN_STREAM, model)
+        break
+      case TokenType.Objective:
+        model = this.parseObjective(TOKEN_STREAM, model)
         break
     }
     return {

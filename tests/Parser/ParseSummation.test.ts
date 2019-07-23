@@ -31,7 +31,7 @@ class Tester extends Eval {
           const expected = x.expected
           if (tokens.hasNext()) {
             const r = this.parseSum(tokens)
-            expect(r.sumModel.getModelInfo().expr).to.deep.equal(expected)
+            expect(r.sumModel.getValues().expr).to.deep.equal(expected)
           }
         });
       });
