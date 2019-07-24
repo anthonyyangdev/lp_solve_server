@@ -156,7 +156,7 @@ class Eval {
   }
 
   protected parseSet(stream: Tokenizer, model: Model) {
-    const expected = [
+    let expected = [
       TokenType.Set,
       TokenType.Word,
       TokenType.Equal,
@@ -164,7 +164,6 @@ class Eval {
     ]
 
     const variable = new SetModel()
-
     for (const s of expected) {
       if (!stream.hasNext())
         throw new Error('There are no more tokens.')
@@ -188,7 +187,43 @@ class Eval {
       }
     }
 
-    model.addSetVariable(variable)
+    const moreSetVariables = [variable]
+    expected = [
+      TokenType.Comma,
+      TokenType.Word,
+      TokenType.Equal,
+      TokenType.Expr,
+    ]
+    while (stream.peek().getType() !== TokenType.SemiColon) {
+      const setVar = new SetModel()
+      for (const s of expected) {
+        if (!stream.hasNext())
+          throw new Error('There are no more tokens.')
+        let now = undefined
+        switch (s) {
+          case TokenType.Word:
+            now = stream.poll()
+            const word = this.parseVariable(now)
+            setVar.addName(word)
+            break
+          case TokenType.Expr:
+            const res = this.parseExpression(stream)
+            stream = res.stream
+            setVar.addValue(res.expr)
+            break
+          default:
+            now = stream.poll()
+            if (now.getType() !== s)
+              throw new Error(this.errorMsg(s, now, stream))
+            break
+        }
+      }
+      moreSetVariables.push(setVar)
+    }
+
+    for (const v of moreSetVariables)
+      model.addSetVariable(v)
+
     return model
   }
 
@@ -232,24 +267,35 @@ class Eval {
     return model
   }
 
+  /**
+   * Parses the next sequence of tokens, assuming that they form a type declaration
+   * statement. Parsing is complete when a semi-colon is detected in the token
+   * sequence. The information from the type declaration is added to the model.
+   * 
+   * @param stream Token stream
+   * @param model The optimization algebraic model
+   */
   protected parseTypeDeclaration(stream: Tokenizer, model: Model) {
 
     const typeDeclareModel = new TypeDeclareModel()
 
-    const possibleType = stream.poll()
-    if (possibleType.getType() === TokenType.VariableType) {
-      typeDeclareModel.addType(possibleType.getLiteral())
-    } else {
-      throw new Error(`Was expecting a type declaration but received ${possibleType.getType()} instead.`)
+    const checkPossible = (possible: Token, expected: TokenType, closure: any) => {
+      const actualType = possible.getType()
+      if (actualType === expected) {
+        closure()
+      } else {
+        throw new Error(`Was expecting a ${expected} but received ${actualType} instead.`)
+      }
     }
-
-    const possibleValue = stream.poll()
-    if (possibleValue.getType() === TokenType.Word) {
-      const word = this.parseVariable(possibleType)
+    let token = stream.poll()
+    checkPossible(token, TokenType.VariableType, () => {
+      typeDeclareModel.addType(token.getLiteral())
+    })
+    token = stream.poll()
+    checkPossible(token, TokenType.Word, () => {
+      const word = this.parseVariable(token)
       typeDeclareModel.addVariable(word)
-    } else {
-      throw new Error(`Was expecting a variable name but received ${possibleType.getType()} instead.`)
-    }
+    })
 
     const expected = [
       TokenType.Comma,
@@ -274,7 +320,6 @@ class Eval {
         }
       }
     }
-
     model.addTypeDeclaration(typeDeclareModel)
     return model
   }
