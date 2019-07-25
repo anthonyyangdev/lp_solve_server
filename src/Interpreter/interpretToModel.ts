@@ -1,17 +1,10 @@
-import Model from '../Models/model'
-import Eval from './Eval'
-
+import Eval from './EvalExtended'
+import removeComments from '../RemoveComments'
 /**
  * @param {string[]} content 
  */
-function interpretToModel(content: string[]) {
-  let model = new Model()
+export default function interpretToModel(content: string) {
+  content = removeComments(content)
   let evaluator = new Eval()
-  for (let i = 0; i < content.length; i++) {
-    const currentLine = content[i]
-    model = evaluator.eval(currentLine, model)
-  }
-  return model
+  return evaluator.eval(content)
 }
-
-export default interpretToModel

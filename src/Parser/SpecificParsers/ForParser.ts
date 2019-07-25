@@ -2,37 +2,41 @@ import SpecificParserInterface from './SpecificParserInterface'
 import Model from '../../Models/Model';
 import Tokenizer from '../../Interpreter/Tokenizer/Tokenizer'
 import TokenType from '../../Interpreter/Tokenizer/TokenType'
-import ObjectiveModel from '../../Models/ObjectiveModel'
-import HelperParser from '../ParserHelper/HelperParserImpl';
+import IterationModel from 'src/Models/IterationModel';
+import HelperParser from '../ParserHelper/HelperParserImpl'
 import ParserType from '../ParserType';
-import ParserError from '../ParserErrorMsg';
+import ParserError from '../ParserErrorMsg'
 
-export default class ObjectiveParser implements SpecificParserInterface {
+export default class ForParser implements SpecificParserInterface {
 
   private expected = [
-    TokenType.Objective,
-    TokenType.Colon,
-    TokenType.Colon,
+    TokenType.For,
+    TokenType.Word,
+    TokenType.Equal,
     TokenType.Expr,
+    TokenType.To,
+    TokenType.Expr,
+    TokenType.Colon,
+    TokenType.Expr
   ]
 
   parse(model: Model, stream: Tokenizer): Model {
 
-    const objective = new ObjectiveModel()
+    throw new Error('Not implemented')
+
+    const forModel = new IterationModel()
     for (const s of this.expected) {
       if (!stream.hasNext())
         throw new Error('There are no more tokens.')
       let now = undefined
       switch (s) {
-        case TokenType.Objective:
-          now = stream.poll()
-          const opType = now.getLiteral()
-          objective.addObjective(opType)
-          break
         case TokenType.Expr:
           const expr = HelperParser.parse(stream, ParserType.Expression)
-          objective.addExpression(expr)
+          forModel.addExpr(expr)
           break
+        case TokenType.Word:
+          const word = HelperParser.parse(stream, ParserType.Variable)
+          forModel.addVariable(word)
         default:
           now = stream.poll()
           if (now.getType() !== s)
@@ -40,7 +44,8 @@ export default class ObjectiveParser implements SpecificParserInterface {
           break
       }
     }
-    model.addObjective(objective)
+
+    const expr = forModel.processModel()
     return model
   }
 
