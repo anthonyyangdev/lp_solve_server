@@ -6,6 +6,8 @@ import HelperParserInterface from './HelperParserInterface';
 import HelperParser from './HelperParserImpl'
 import ParserType from '../ParserType';
 import ParserError from '../ParserErrorMsg'
+import Model from '../../Models/Model';
+import Environment from '../../Models/Environment';
 
 export default class SumParser implements HelperParserInterface {
 
@@ -23,24 +25,23 @@ export default class SumParser implements HelperParserInterface {
     TokenType.RPAREN,
   ]
 
-  parse(stream: Tokenizer): string {
+  parse(env: Environment, stream: Tokenizer): string {
 
     let sumModel = new IterationModel()
     for (const s of this.expected) {
       if (!stream.hasNext())
         throw new Error('There are no more tokens.')
-      let now = undefined
       switch (s) {
         case TokenType.Word:
-          const word = HelperParser.parse(stream, ParserType.Variable)
+          const word = HelperParser.parse(env, stream, ParserType.Variable)
           sumModel.addVariable(word)
           break
         case TokenType.Expr:
-          const expr = HelperParser.parse(stream, ParserType.Expression)
+          const expr = HelperParser.parse(env, stream, ParserType.Expression)
           sumModel.addExpr(expr)
           break
         default:
-          now = stream.poll()
+          const now = stream.poll()
           if (now.getType() !== s)
             throw new Error(ParserError.errorMsg(s, now, stream))
           break
@@ -48,7 +49,7 @@ export default class SumParser implements HelperParserInterface {
     }
 
     // Transform sum model into an expression
-    const expr = sumModel.processModel()
+    const expr = sumModel.processModel(env, TokenType.Sum)
     return expr
   }
 

@@ -1,9 +1,9 @@
 import ParserInterface from './ParserInterface'
 import ParserType from './ParserType'
-import Model from 'src/Models/Model';
+import Model from '../Models/Model';
 
 import SpecificParser from './SpecificParsers/SpecificParserImpl'
-import Tokenizer from 'src/Interpreter/Tokenizer/Tokenizer';
+import Tokenizer from '../Interpreter/Tokenizer/Tokenizer';
 
 export default class Parser implements ParserInterface {
 

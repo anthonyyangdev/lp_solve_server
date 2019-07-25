@@ -1,11 +1,12 @@
 import { expect } from 'chai';
-import Eval from '../../src/Interpreter/Eval'
 import TYPES from '../../src/Interpreter/Tokenizer/TokenType'
 import Tokenizer from '../../src/Interpreter/Tokenizer/Tokenizer';
 import 'mocha'
+import Model from '../../src/Models/Model';
+import ParserType from '../../src/Parser/ParserType';
+import VariableParser from '../../src/Parser/ParserHelper/HelperParserImpl'
 
-
-class Tester extends Eval {
+class Tester {
 
   private tests = [
     {
@@ -53,21 +54,23 @@ class Tester extends Eval {
     },
   ]
 
-  constructor() {
-    super()
-  }
-
   public runTest() {
     this.tests.forEach(x => {
       describe('Tokenizer', () => {
         it(`This should parse the variables in the input:\n${x.input}`, () => {
           const result = new Tokenizer(x.input);
+          const model = new Model()
           const expected = x.expected
           let index = 0
-          while (result.hasNext()) {
-            const token = result.poll()
-            if (token.getType() === TYPES.Word)
-              expect(this.parseVariable(token)).to.equal(expected[index++]);
+          while (result.hasNext() && result.peek().getType() !== TYPES.SemiColon) {
+            const token = result.peek()
+            const env = model.getEnvironment()
+            if (token.getType() === TYPES.Word) {
+              const actual = VariableParser.parse(env, result, ParserType.Variable)
+              expect(actual).to.equal(expected[index++]);
+            } else {
+              result.pop()
+            }
           }
         });
       });

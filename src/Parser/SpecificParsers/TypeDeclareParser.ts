@@ -17,6 +17,7 @@ export default class TypeDeclareParser implements SpecificParserInterface {
   parse(model: Model, stream: Tokenizer): Model {
 
     const typeDeclareModel = new TypeDeclareModel()
+    const env = model.getEnvironment()
 
     const checkPossible = (expected: TokenType, closure: any) => {
       const actualType = stream.peek().getType()
@@ -31,14 +32,14 @@ export default class TypeDeclareParser implements SpecificParserInterface {
       typeDeclareModel.addType(stream.poll().getLiteral())
     })
     checkPossible(TokenType.Word, () => {
-      const word = HelperParser.parse(stream, ParserType.Variable)
+      const word = HelperParser.parse(env, stream, ParserType.Variable)
       typeDeclareModel.addVariable(word)
     })
 
     while (stream.peek().getType() !== TokenType.SemiColon) {
       for (const s of this.expected) {
         checkPossible(TokenType.Word, () => {
-          const word = HelperParser.parse(stream, ParserType.Variable)
+          const word = HelperParser.parse(env, stream, ParserType.Variable)
           typeDeclareModel.addVariable(word)
         })
       }

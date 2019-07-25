@@ -5,6 +5,7 @@ import SumParser from './SumParser'
 import NumberParser from './NumberParser'
 import OperatorParser from './OperatorParser'
 import ExprParser from './ExprParser'
+import Environment from '../../Models/Environment'
 
 export default class HelperParser {
 
@@ -14,18 +15,18 @@ export default class HelperParser {
   private static Operator = new OperatorParser()
   private static Expr = new ExprParser()
 
-  static parse(stream: Tokenizer, type: ParserType) {
+  static parse(env: Environment, stream: Tokenizer, type: ParserType) {
     switch (type) {
       case ParserType.Expression:
-        return this.Expr.parse(stream)
+        return this.Expr.parse(env, stream)
       case ParserType.Number:
-        return this.Number.parse(stream)
+        return this.Number.parse(env, stream)
       case ParserType.Variable:
-        return this.Variable.parse(stream)
+        return this.Variable.parse(env, stream)
       case ParserType.Operator:
-        return this.Operator.parse(stream)
+        return this.Operator.parse(env, stream)
       case ParserType.Sum:
-        return this.Sum.parse(stream)
+        return this.Sum.parse(env, stream)
       default:
         throw new Error(`${type} cannot be parsed by a helper Parser.`)
     }

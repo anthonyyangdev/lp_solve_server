@@ -2,7 +2,7 @@ import SpecificParserInterface from './SpecificParserInterface'
 import Model from '../../Models/Model';
 import Tokenizer from '../../Interpreter/Tokenizer/Tokenizer'
 import TokenType from '../../Interpreter/Tokenizer/TokenType'
-import IterationModel from 'src/Models/IterationModel';
+import IterationModel from '../../Models/IterationModel';
 import HelperParser from '../ParserHelper/HelperParserImpl'
 import ParserType from '../ParserType';
 import ParserError from '../ParserErrorMsg'
@@ -45,7 +45,7 @@ export default class ForParser implements SpecificParserInterface {
       }
     }
 
-    const expr = forModel.processModel()
+    const expr = forModel.processModel(TokenType.For)
     return model
   }
 

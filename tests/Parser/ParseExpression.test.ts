@@ -1,10 +1,14 @@
 import { expect } from 'chai';
 import Eval from '../../src/Interpreter/Eval'
 import Tokenizer from '../../src/Interpreter/Tokenizer/Tokenizer';
+import HelperParser from '../../src/Parser/ParserHelper/HelperParserImpl'
 import 'mocha'
+import Model from '../../src/Models/Model';
+import ParserType from '../../src/Parser/ParserType';
+import { Stream } from 'stream';
 
 
-class Tester extends Eval {
+class Tester {
 
   private tests = [
     {
@@ -58,19 +62,16 @@ class Tester extends Eval {
     },
   ]
 
-  constructor() {
-    super()
-  }
-
   public runTest() {
     this.tests.forEach(x => {
       describe('Tokenizer', () => {
         it(`This should parse the entire expression of the input:\n${x.input}`, () => {
+          const model = new Model()
           const result = new Tokenizer(x.input);
           const expected = x.expected
           if (result.hasNext()) {
-            const r = this.parseExpression(result)
-            expect(r.expr).to.equal(expected)
+            const r = HelperParser.parse(model.getEnvironment(), result, ParserType.Expression)
+            expect(r).to.equal(expected)
           }
         });
       });

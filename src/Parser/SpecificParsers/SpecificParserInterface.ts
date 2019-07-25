@@ -1,5 +1,5 @@
 import Model from '../../Models/Model'
-import Tokenizer from 'src/Interpreter/Tokenizer/Tokenizer';
+import Tokenizer from '../../Interpreter/Tokenizer/Tokenizer';
 
 interface SpecificParserInterface {
 

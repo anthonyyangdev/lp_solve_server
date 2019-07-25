@@ -1,9 +1,10 @@
 import HelperParserInterface from "./HelperParserInterface";
 import Tokenizer from "src/Interpreter/Tokenizer/Tokenizer";
+import Environment from "src/Models/Environment";
 
 
 export default class OperatorParser implements HelperParserInterface {
-  parse(stream: Tokenizer): string {
+  parse(env: Environment, stream: Tokenizer): string {
     const operator = stream.poll().getLiteral().trim()
     const regex = /[+-]/
     if (regex.test(operator)) {

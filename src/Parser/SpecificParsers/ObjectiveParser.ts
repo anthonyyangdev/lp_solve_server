@@ -30,7 +30,7 @@ export default class ObjectiveParser implements SpecificParserInterface {
           objective.addObjective(opType)
           break
         case TokenType.Expr:
-          const expr = HelperParser.parse(stream, ParserType.Expression)
+          const expr = HelperParser.parse(model.getEnvironment(), stream, ParserType.Expression)
           objective.addExpression(expr)
           break
         default:

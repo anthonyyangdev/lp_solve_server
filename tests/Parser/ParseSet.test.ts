@@ -3,9 +3,11 @@ import Eval from '../../src/Interpreter/Eval'
 import Tokenizer from '../../src/Interpreter/Tokenizer/Tokenizer';
 import 'mocha'
 import Model from '../../src/Models/Model';
+import ParserType from '../../src/Parser/ParserType';
+import SetParser from '../../src/Parser/SpecificParsers/SpecificParserImpl'
+import TYPES from '../../src/Interpreter/Tokenizer/TokenType';
 
-
-class Tester extends Eval {
+class Tester {
 
   private tests = [
     {
@@ -31,10 +33,6 @@ class Tester extends Eval {
     }
   ]
 
-  constructor() {
-    super()
-  }
-
   public runTest() {
     this.tests.forEach(x => {
       describe('Tokenizer', () => {
@@ -43,9 +41,9 @@ class Tester extends Eval {
           let model = new Model()
           const name = x.expectedName
           const value = x.expectedValue
+          const env = model.getEnvironment()
           if (result.hasNext()) {
-            model = this.parseSet(result, model)
-            const env = model.getEnvironment()
+            model = SetParser.parse(model, result, ParserType.Set)
             expect(env.exist(name)).to.equal(true)
             expect(env.get(name)).to.equal(value)
           }
@@ -95,8 +93,8 @@ class ExtendedSetTester extends Eval {
           const result = new Tokenizer(x.input);
           let model = new Model()
           const expected = x.expected
-          if (result.hasNext()) {
-            model = this.parseSet(result, model)
+          if (result.hasNext() && result.peek().getType() === TYPES.Set) {
+            model = SetParser.parse(model, result, ParserType.Set)
             const env = model.getEnvironment()
             for (const o of expected) {
               expect(env.exist(o.name)).to.equal(true)

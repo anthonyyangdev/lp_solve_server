@@ -23,17 +23,19 @@ export default class SetParser implements SpecificParserInterface {
       if (!stream.hasNext())
         throw new Error('There are no more tokens.')
       let now = undefined
+      const env = model.getEnvironment()
       switch (s) {
         case TokenType.Word:
-          const word = HelperParser.parse(stream, ParserType.Variable)
+          const word = HelperParser.parse(env, stream, ParserType.Variable)
           variable.addName(word)
           break
         case TokenType.Expr:
-          const expr = HelperParser.parse(stream, ParserType.Expression)
+          const expr = HelperParser.parse(env, stream, ParserType.Expression)
           variable.addValue(expr)
           break
         default:
           now = stream.poll()
+          const res = now.getType() !== s
           if (now.getType() !== s)
             throw new Error(ParserError.errorMsg(s, now, stream))
           break
@@ -41,24 +43,29 @@ export default class SetParser implements SpecificParserInterface {
     }
 
     const moreSetVariables = [variable]
+    const followingExpected = [
+      TokenType.Comma,
+      TokenType.Word,
+      TokenType.Equal,
+      TokenType.Expr,
+    ]
     while (stream.peek().getType() !== TokenType.SemiColon) {
       const setVar = new SetModel()
-      for (const s of this.expected) {
+      for (const s of followingExpected) {
         if (!stream.hasNext())
           throw new Error('There are no more tokens.')
-        let now = undefined
+        const env = model.getEnvironment()
         switch (s) {
           case TokenType.Word:
-            now = stream.poll()
-            const word = HelperParser.parse(stream, ParserType.Variable)
+            const word = HelperParser.parse(env, stream, ParserType.Variable)
             setVar.addName(word)
             break
           case TokenType.Expr:
-            const expr = HelperParser.parse(stream, ParserType.Expression)
+            const expr = HelperParser.parse(env, stream, ParserType.Expression)
             setVar.addValue(expr)
             break
           default:
-            now = stream.poll()
+            const now = stream.poll()
             if (now.getType() !== s)
               throw new Error(ParserError.errorMsg(s, now, stream))
             break

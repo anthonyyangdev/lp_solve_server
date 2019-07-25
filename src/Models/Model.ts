@@ -1,28 +1,7 @@
 import SetModel from './SetModel'
-import { expression } from '@babel/template';
 import ObjectiveModel from './ObjectiveModel';
 import TypeDeclareModel from './TypeDeclareModel';
-
-class Environment {
-  private map: any = {}
-
-  public addContent(variable: SetModel) {
-    const values = variable.getValues()
-    this.map[values.name] = values.value
-  }
-
-  public get(name: string) {
-    return this.map[name]
-  }
-
-  public exist(name: string) {
-    return this.map[name] !== undefined
-  }
-
-  public getAllVariables() {
-    return Object.keys(this.map)
-  }
-}
+import Environment from './Environment';
 
 class Constraints {
   private count: number = 1

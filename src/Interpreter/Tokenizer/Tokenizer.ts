@@ -70,7 +70,10 @@ class Tokenizer {
   }
 
   public pop() {
-    const current = this.tokens[++this.traverselPosition]
+    const current = this.tokens[this.traverselPosition++]
+    if (current === undefined) {
+      console.log('Ok')
+    }
     if (current.getType() === TYPES.SemiColon) {
       this.lineCount++
       this.tokenPosition = 1

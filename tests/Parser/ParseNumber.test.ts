@@ -3,6 +3,9 @@ import Eval from '../../src/Interpreter/Eval'
 import TYPES from '../../src/Interpreter/Tokenizer/TokenType'
 import Tokenizer from '../../src/Interpreter/Tokenizer/Tokenizer';
 import 'mocha'
+import HelperParser from '../../src/Parser/ParserHelper/HelperParserImpl'
+import Model from '../../src/Models/Model';
+import ParserType from '../../src/Parser/ParserType';
 
 
 class Tester extends Eval {
@@ -53,21 +56,26 @@ class Tester extends Eval {
     },
   ]
 
-  constructor() {
-    super()
-  }
-
   public runTest() {
     this.tests.forEach(x => {
       describe('Tokenizer', () => {
         it(`This should parse the numbers in the input:\n${x.input}`, () => {
           const result = new Tokenizer(x.input);
+          const model = new Model()
           const expected = x.expected
           let index = 0
           while (result.hasNext()) {
-            const token = result.poll()
-            if (token.getType() === TYPES.Number)
-              expect(this.parseNumber(token)).to.equal(expected[index++]);
+            const token = result.peek()
+            if (token === undefined) {
+              console.log(result)
+            }
+            if (token.getType() === TYPES.Number) {
+              const r = HelperParser.parse(model.getEnvironment(), result, ParserType.Number)
+              const exp = expected[index++]
+              expect(r).to.equal(exp)
+            } else {
+              result.pop()
+            }
           }
         });
       });
