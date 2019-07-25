@@ -23,6 +23,9 @@ export default class Token {
     return this.value
   }
 
+  /**
+   * Returns the literal string value of the token.
+   */
   public getLiteral() {
     return this.literal
   }

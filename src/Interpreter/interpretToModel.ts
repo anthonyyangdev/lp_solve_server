@@ -1,4 +1,4 @@
-import Model from '../Model/model'
+import Model from '../Models/model'
 import Eval from './Eval'
 
 /**

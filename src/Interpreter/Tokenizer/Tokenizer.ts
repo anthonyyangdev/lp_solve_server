@@ -53,10 +53,13 @@ class Tokenizer {
   }
 
   /**
-   * @returns {Token}
+   * Pops and returns the next token in the token stream. 
    */
-  public poll() {
+  public poll(): Token {
     const current = this.tokens[this.traverselPosition++]
+    if (current === undefined) {
+      throw new Error('There are no more tokens.')
+    }
     if (current.getType() === TYPES.SemiColon) {
       this.lineCount++
       this.tokenPosition = 1

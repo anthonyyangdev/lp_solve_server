@@ -15,7 +15,7 @@ class TypeDeclareModel extends AbstractModel {
     this.variables[this.count++] = name
   }
 
-  public getValues(): Object {
+  public getValues() {
     if (this.type === undefined || this.variables.length === 0) {
       throw new Error('Some values have not been defined in the TypeDeclareModel. Possibly dangerous to receive values.')
     }

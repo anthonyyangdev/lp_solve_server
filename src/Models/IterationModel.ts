@@ -4,6 +4,7 @@ class IterationModel extends AbstractModel {
 
   private variable: any = undefined
   private expression: string[] = []
+  private fullExpression: string = ''
 
   public addVariable(variable: string) {
     this.isDefined(this.variable)
@@ -20,6 +21,11 @@ class IterationModel extends AbstractModel {
       expr: this.expression
     }
   }
+
+  public processModel(): string {
+    return this.fullExpression
+  }
+
 }
 
 export default IterationModel

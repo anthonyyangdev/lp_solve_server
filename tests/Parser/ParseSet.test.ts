@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import Eval from '../../src/Interpreter/Eval'
 import Tokenizer from '../../src/Interpreter/Tokenizer/Tokenizer';
 import 'mocha'
-import Model from '../../src/Model/Model';
+import Model from '../../src/Models/Model';
 
 
 class Tester extends Eval {

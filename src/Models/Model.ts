@@ -52,17 +52,42 @@ class Objectives {
   }
 }
 
+class TypeDeclarations {
+  private integers: {
+    variable: string
+  }[]
+  private free: {
+    variable: string
+  }[]
+  private binary: {
+    variable: string
+  }[]
+
+  constructor() {
+    this.integers = []
+    this.binary = []
+    this.free = []
+  }
+
+  public add(type: string, variable: string) {
+
+  }
+
+}
+
 class Model {
   private optimize = '_obj'
   private objective: Objectives
   private constraints: Constraints
   private env: Environment
   private constraintCount = 0
+  private types: TypeDeclarations
 
   constructor() {
     this.objective = new Objectives()
     this.constraints = new Constraints()
     this.env = new Environment()
+    this.types = new TypeDeclarations()
   }
 
   public addSetVariable(variable: SetModel) {
@@ -86,7 +111,10 @@ class Model {
   }
 
   public addTypeDeclaration(declaration: TypeDeclareModel) {
-    throw new Error(`Not implemented: ${declaration}`)
+    const { type, variables } = declaration.getValues()
+    for (const v of variables) {
+      this.types.add(type, v)
+    }
   }
 }
 

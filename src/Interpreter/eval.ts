@@ -1,12 +1,12 @@
 import Tokenizer from './Tokenizer/Tokenizer'
 import TokenType from './Tokenizer/TokenType'
-import IterationModel from '../Model/IterationModel'
+import IterationModel from '../Models/IterationModel'
 import StringBuilder from '../StringBuilder/StringBuilder'
 import Token from './Tokenizer/Token'
-import Model from '../Model/Model'
-import SetModel from '../Model/SetModel';
-import ObjectiveModel from '../Model/ObjectiveModel';
-import TypeDeclareModel from '../Model/TypeDeclareModel';
+import Model from '../Models/Model'
+import SetModel from '../Models/SetModel';
+import ObjectiveModel from '../Models/ObjectiveModel';
+import TypeDeclareModel from '../Models/TypeDeclareModel';
 
 class Eval {
   /**

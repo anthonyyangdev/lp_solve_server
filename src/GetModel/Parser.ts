@@ -1,6 +1,6 @@
-import removeComments from './RemoveComments'
-import toArray from './ToArray/toArray'
-import interpretToModel from './Interpreter/interpretToModel'
+import removeComments from '../RemoveComments'
+import toArray from '../ToArray/toArray'
+import interpretToModel from '../Interpreter/interpretToModel'
 
 function getModelFromContent(content: string) {
 
