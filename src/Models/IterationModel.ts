@@ -46,7 +46,7 @@ class IterationModel extends AbstractModel {
     try {
       value = mathjs.evaluate(expr)
     } catch (e) {
-      throw new ParseError('Sum start index cannot be evaluated as a number.')
+      throw new Error('Sum start index cannot be evaluated as a number.')
     }
     return value
   }

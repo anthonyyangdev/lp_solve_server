@@ -8,7 +8,8 @@ export default class VariableParser implements HelperParserInterface {
     const word = stream.poll().getLiteral().trim()
     const regex = /[a-zA-Z]\w*/
     if (regex.test(word)) {
-      return word
+      const appliedVariables = env.applyVariables(word)
+      return appliedVariables
     }
     else
       throw new SyntaxError(`The variable name ${word} is not valid.`)

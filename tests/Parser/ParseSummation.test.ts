@@ -24,7 +24,7 @@ class Tester {
 
   public runTest() {
     this.tests.forEach(x => {
-      describe('Tokenizer', () => {
+      describe('Sum Test', () => {
         it(`This parses the summation:\n${x.input}`, () => {
           const tokens = new Tokenizer(x.input);
           const model = new Model()

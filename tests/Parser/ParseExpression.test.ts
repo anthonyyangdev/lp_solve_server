@@ -60,7 +60,7 @@ class Tester {
 
   public runTest() {
     this.tests.forEach(x => {
-      describe('Tokenizer', () => {
+      describe('Expression Test', () => {
         it(`This should parse the entire expression of the input:\n${x.input}`, () => {
           const model = new Model()
           const result = new Tokenizer(x.input);

@@ -56,7 +56,7 @@ class Tester {
 
   public runTest() {
     this.tests.forEach(x => {
-      describe('Tokenizer', () => {
+      describe('Variable Test', () => {
         it(`This should parse the variables in the input:\n${x.input}`, () => {
           const result = new Tokenizer(x.input);
           const model = new Model()

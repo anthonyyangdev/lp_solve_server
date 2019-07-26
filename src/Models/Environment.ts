@@ -20,6 +20,19 @@ export default class Environment {
     this.explicitAddContent(values.name, values.value)
   }
 
+  public unsetVariable(name: string) {
+    if (this.map[name]) {
+      const next = this.map[name].next
+      if (next === null) {
+        delete this.map[name]
+      } else {
+        this.map[name] = next
+      }
+    } else {
+      throw new ReferenceError(`${name} is not found in the environment.`)
+    }
+  }
+
   public get(name: string): string {
     if (this.map[name] === undefined)
       throw new Error(`Undefined variable ${name}`)

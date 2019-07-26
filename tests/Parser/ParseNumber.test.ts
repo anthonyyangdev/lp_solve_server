@@ -58,7 +58,7 @@ class Tester extends Eval {
 
   public runTest() {
     this.tests.forEach(x => {
-      describe('Tokenizer', () => {
+      describe('Number Test', () => {
         it(`This should parse the numbers in the input:\n${x.input}`, () => {
           const result = new Tokenizer(x.input);
           const model = new Model()

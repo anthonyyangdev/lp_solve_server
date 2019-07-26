@@ -25,7 +25,6 @@ export default class ForParser implements SpecificParserInterface {
   parse(model: Model, stream: Tokenizer): Model {
 
     const env = model.getEnvironment()
-    // throw new Error('Not implemented')
 
     const forModel = new IterationModel()
     for (const s of this.expected) {
@@ -50,6 +49,7 @@ export default class ForParser implements SpecificParserInterface {
             env.explicitAddContent(name, a)
             const frozenStream = stream.clone()
             model = StatementParser.parse(model, frozenStream)
+            env.unsetVariable(name)
           }
           stream.flushToEnd();
           return model

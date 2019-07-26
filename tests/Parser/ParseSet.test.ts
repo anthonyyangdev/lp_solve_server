@@ -88,8 +88,8 @@ class ExtendedSetTester extends Eval {
 
   public runTest() {
     this.tests.forEach(x => {
-      describe('Tokenizer', () => {
-        it(`This should parse the numbers in the input:\n${x.input}`, () => {
+      describe('Set Test', () => {
+        it(`This should parse the set statements in the input:\n${x.input}`, () => {
           const result = new Tokenizer(x.input);
           let model = new Model()
           const expected = x.expected
