@@ -5,7 +5,6 @@ import HelperParser from '../../src/Parser/ParserHelper/HelperParserImpl'
 import 'mocha'
 import Model from '../../src/Models/Model';
 import ParserType from '../../src/Parser/ParserType';
-import { Stream } from 'stream';
 
 
 class Tester {
@@ -48,14 +47,11 @@ class Tester {
       input: 'x - 12;',
       expected: 'x-12'
     }, {
-      input: '(z_t);',
+      input: 'z_t;',
       expected: 'z_t'
     }, {
-      input: '((z_t) + 5);',
+      input: 'z_t + 5;',
       expected: 'z_t+5'
-    }, {
-      input: '((((z_t))));',
-      expected: 'z_t'
     }, {
       input: 'y_x + z_x ;',
       expected: 'y_x+z_x'

@@ -5,7 +5,7 @@ import SetParser from './SetParser'
 import TypeDeclareParser from './TypeDeclareParser'
 import Model from '../../Models/Model';
 
-export default class HelperParser {
+export default class SpecificParser {
 
   private static Objective = new ObjectiveParser()
   private static Set = new SetParser()

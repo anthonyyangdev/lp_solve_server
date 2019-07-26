@@ -1,9 +1,8 @@
 import ParserInterface from './ParserInterface'
-import ParserType from './ParserType'
 import Model from '../Models/Model';
 
-import SpecificParser from './SpecificParsers/SpecificParserImpl'
 import Tokenizer from '../Interpreter/Tokenizer/Tokenizer';
+import StatementParser from '../Parser/SpecificParsers/GeneralStatementParser'
 
 export default class Parser implements ParserInterface {
 
@@ -13,8 +12,8 @@ export default class Parser implements ParserInterface {
     this.model = new Model()
   }
 
-  parse(stream: Tokenizer, type: ParserType): boolean {
-    this.model = SpecificParser.parse(this.model, stream, type)
+  parse(stream: Tokenizer): boolean {
+    this.model = StatementParser.parse(this.model, stream)
     return true
   }
 

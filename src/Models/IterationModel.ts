@@ -1,6 +1,5 @@
 import AbstractModel from "./AbstractModel";
 import TokenType from '../Interpreter/Tokenizer/TokenType'
-import Model from "./Model";
 import Environment from "./Environment";
 const mathjs = require('mathjs')
 
@@ -47,7 +46,7 @@ class IterationModel extends AbstractModel {
     try {
       value = mathjs.evaluate(expr)
     } catch (e) {
-      throw new Error('Sum start index cannot be evaluated as a number.')
+      throw new ParseError('Sum start index cannot be evaluated as a number.')
     }
     return value
   }
@@ -59,27 +58,38 @@ class IterationModel extends AbstractModel {
     for (let i = start; i <= end; i++) {
       let term = expression.replace(/\i/gm, (i).toString())
       for (const e of env.getAllVariables()) {
-        term = term.replace(e, env.get(e))
+        if (term.match(e)) {
+          const value = env.get(e)
+          if (value === undefined)
+            throw new ReferenceError(`Undefined variable ${e}.`)
+          term = term.replace(e, value)
+        }
       }
       this.fullExpression += i === end ? `${term}` : `${term} + `
     }
     return this.fullExpression
   }
 
-  public processModel(env: Environment, type: TokenType): string {
+  private processForStatement(): string {
+    return this.expression[2]
+  }
+
+  public processModel(type: TokenType, env?: Environment): string {
     if (this.expression.length !== 3) {
       throw new Error(`Model Error: Iteration Model does not have 3 expressions.\nThere are ${this.expression.length} expressions.`)
     }
     // Process the model.
     switch (type) {
       case TokenType.Sum:
-        break
+        if (env === undefined) {
+          throw new ReferenceError('Environment is not defined during model processing.')
+        }
+        return this.processSumStatement(env)
       case TokenType.For:
-        break
+        return this.processForStatement()
       default:
         throw new Error(`Cannot process under the ${type} type. It must be either ${TokenType.Sum} or ${TokenType.For}`)
     }
-    return this.fullExpression
   }
 
 }

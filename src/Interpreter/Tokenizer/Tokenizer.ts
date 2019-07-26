@@ -82,12 +82,30 @@ class Tokenizer {
     }
   }
 
+  public flushToEnd() {
+    while (this.hasNext()) {
+      if (this.peek().getType() === TYPES.SemiColon) {
+        return
+      } else {
+        this.pop()
+      }
+    }
+  }
+
   public hasNext() {
     return this.tokens[this.traverselPosition] !== undefined
   }
 
+  /**
+   * Makes a clone of the tokenizer at the same position.
+   */
   public clone() {
-    return this.tokens.map(x => x.clone())
+    const tokenizer = new Tokenizer('')
+    tokenizer.tokens = this.tokens.map(x => x.clone())
+    tokenizer.traverselPosition = this.traverselPosition
+    tokenizer.lineCount = this.lineCount
+    tokenizer.tokenPosition = this.tokenPosition
+    return tokenizer
   }
 
   public getCurrentPosition() {

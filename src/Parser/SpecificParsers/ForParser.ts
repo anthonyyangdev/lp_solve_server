@@ -4,8 +4,10 @@ import Tokenizer from '../../Interpreter/Tokenizer/Tokenizer'
 import TokenType from '../../Interpreter/Tokenizer/TokenType'
 import IterationModel from '../../Models/IterationModel';
 import HelperParser from '../ParserHelper/HelperParserImpl'
+import StatementParser from '../SpecificParsers/GeneralStatementParser'
 import ParserType from '../ParserType';
 import ParserError from '../ParserErrorMsg'
+const mathjs = require('mathjs')
 
 export default class ForParser implements SpecificParserInterface {
 
@@ -17,12 +19,13 @@ export default class ForParser implements SpecificParserInterface {
     TokenType.To,
     TokenType.Expr,
     TokenType.Colon,
-    TokenType.Expr
+    TokenType.Statement
   ]
 
   parse(model: Model, stream: Tokenizer): Model {
 
-    throw new Error('Not implemented')
+    const env = model.getEnvironment()
+    // throw new Error('Not implemented')
 
     const forModel = new IterationModel()
     for (const s of this.expected) {
@@ -31,12 +34,25 @@ export default class ForParser implements SpecificParserInterface {
       let now = undefined
       switch (s) {
         case TokenType.Expr:
-          const expr = HelperParser.parse(stream, ParserType.Expression)
+          const expr = HelperParser.parse(env, stream, ParserType.Expression)
           forModel.addExpr(expr)
           break
         case TokenType.Word:
-          const word = HelperParser.parse(stream, ParserType.Variable)
+          const word = HelperParser.parse(env, stream, ParserType.Variable)
           forModel.addVariable(word)
+          break
+        case TokenType.Statement:
+          const values = forModel.getValues()
+          const name = values.variable
+          const start = mathjs.evaluate(env.applyVariables(values.expr[0]))
+          const end = mathjs.evaluate(env.applyVariables(values.expr[1]))
+          for (let a = start; a <= end; a++) {
+            env.explicitAddContent(name, a)
+            const frozenStream = stream.clone()
+            model = StatementParser.parse(model, frozenStream)
+          }
+          stream.flushToEnd();
+          return model
         default:
           now = stream.poll()
           if (now.getType() !== s)
@@ -44,8 +60,6 @@ export default class ForParser implements SpecificParserInterface {
           break
       }
     }
-
-    const expr = forModel.processModel(TokenType.For)
     return model
   }
 

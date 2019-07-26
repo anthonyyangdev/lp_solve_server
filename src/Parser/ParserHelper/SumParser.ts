@@ -49,7 +49,7 @@ export default class SumParser implements HelperParserInterface {
     }
 
     // Transform sum model into an expression
-    const expr = sumModel.processModel(env, TokenType.Sum)
+    const expr = sumModel.processModel(TokenType.Sum, env)
     return expr
   }
 

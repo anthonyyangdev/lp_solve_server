@@ -30,13 +30,13 @@ export default class ExprParser implements HelperParserInterface {
           const result = HelperParser.parse(env, stream, ParserType.Sum)
           builder.append(result)
           break
-        case TokenType.LPAREN:
-          stream.pop()
-          const expr = HelperParser.parse(env, stream, ParserType.Expression)
-          builder.append(expr)
-          break
-        case TokenType.RPAREN:
-          stream.pop()
+        // case TokenType.LPAREN:
+        //   stream.pop()
+        //   const expr = HelperParser.parse(env, stream, ParserType.Expression)
+        //   builder.append(expr)
+        //   break
+        // case TokenType.RPAREN:
+        //   stream.pop()
         default:
           end = true
       }

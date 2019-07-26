@@ -33,7 +33,7 @@ export default class Token {
   public clone() {
     return new Token({
       value: this.value,
-      regex: this.regex,
+      regex: new RegExp(this.regex),
       type: this.type,
       literal: this.literal
     })
