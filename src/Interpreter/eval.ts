@@ -7,6 +7,7 @@ import Model from '../Models/Model'
 import SetModel from '../Models/SetModel';
 import ObjectiveModel from '../Models/ObjectiveModel';
 import TypeDeclareModel from '../Models/TypeDeclareModel';
+import VariableType from '../Models/VariableTypes';
 
 class Eval {
   /**
@@ -289,7 +290,7 @@ class Eval {
     }
     let token = stream.poll()
     checkPossible(token, TokenType.VariableType, () => {
-      typeDeclareModel.addType(token.getLiteral())
+      typeDeclareModel.addType(VariableType.Int)
     })
     token = stream.poll()
     checkPossible(token, TokenType.Word, () => {

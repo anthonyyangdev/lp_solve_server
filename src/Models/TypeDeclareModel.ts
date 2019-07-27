@@ -1,12 +1,13 @@
 import AbstractModel from "./AbstractModel";
+import VariableType from "./VariableTypes";
 
 class TypeDeclareModel extends AbstractModel {
 
-  private type: string | undefined
+  private type: VariableType | undefined
   private variables: string[] = []
   private count: number = 0
 
-  public addType(type: string) {
+  public addType(type: VariableType) {
     this.isDefined(this.type)
     this.type = type
   }

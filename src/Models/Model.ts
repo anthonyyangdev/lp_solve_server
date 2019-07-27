@@ -2,6 +2,7 @@ import SetModel from './SetModel'
 import ObjectiveModel from './ObjectiveModel';
 import TypeDeclareModel from './TypeDeclareModel';
 import Environment from './Environment';
+import VariableType from './VariableTypes';
 
 class Constraints {
   private count: number = 1
@@ -32,15 +33,12 @@ class Objectives {
 }
 
 class TypeDeclarations {
-  private integers: {
-    variable: string
-  }[]
-  private free: {
-    variable: string
-  }[]
-  private binary: {
-    variable: string
-  }[]
+  private integers: string[]
+  private int_count = 0
+  private free: string[]
+  private free_count = 0
+  private binary: string[]
+  private bin_count = 0
 
   constructor() {
     this.integers = []
@@ -48,10 +46,28 @@ class TypeDeclarations {
     this.free = []
   }
 
-  public add(type: string, variable: string) {
-
+  public add(type: VariableType, variable: string): boolean {
+    switch (type) {
+      case VariableType.Int:
+        this.integers[this.int_count++] = variable
+        break
+      case VariableType.Free:
+        this.free[this.free_count++] = variable
+        break
+      case VariableType.Bin:
+        this.binary[this.bin_count++] = variable
+        break
+    }
+    return true
   }
 
+  public getAll() {
+    return {
+      int: this.integers,
+      free: this.free,
+      bin: this.binary
+    }
+  }
 }
 
 class Model {
@@ -95,6 +111,11 @@ class Model {
       this.types.add(type, v)
     }
   }
+
+  public getAllTypeDeclarations() {
+    return this.types.getAll()
+  }
+
 }
 
 export default Model

@@ -35,7 +35,6 @@ export default class SetParser implements SpecificParserInterface {
           break
         default:
           now = stream.poll()
-          const res = now.getType() !== s
           if (now.getType() !== s)
             throw new Error(ParserError.errorMsg(s, now, stream))
           break

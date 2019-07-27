@@ -6,6 +6,7 @@ import TypeDeclareModel from '../../Models/TypeDeclareModel'
 
 import HelperParser from '../ParserHelper/HelperParserImpl'
 import ParserType from '../ParserType';
+import VariableType from '../../Models/VariableTypes';
 
 export default class TypeDeclareParser implements SpecificParserInterface {
 
@@ -29,7 +30,22 @@ export default class TypeDeclareParser implements SpecificParserInterface {
     }
 
     checkPossible(TokenType.VariableType, () => {
-      typeDeclareModel.addType(stream.poll().getLiteral())
+      let type
+      const value = stream.poll().getLiteral()
+      switch (value) {
+        case 'int':
+          type = VariableType.Int
+          break
+        case 'free':
+          type = VariableType.Free
+          break
+        case 'bin':
+          type = VariableType.Bin
+          break
+        default:
+          throw new Error(`Type ${value} cannot be declared.`)
+      }
+      typeDeclareModel.addType(type)
     })
     checkPossible(TokenType.Word, () => {
       const word = HelperParser.parse(env, stream, ParserType.Variable)
@@ -38,10 +54,14 @@ export default class TypeDeclareParser implements SpecificParserInterface {
 
     while (stream.peek().getType() !== TokenType.SemiColon) {
       for (const s of this.expected) {
-        checkPossible(TokenType.Word, () => {
-          const word = HelperParser.parse(env, stream, ParserType.Variable)
-          typeDeclareModel.addVariable(word)
-        })
+        if (s === TokenType.Comma) {
+          checkPossible(TokenType.Comma, () => { stream.pop() })
+        } else {
+          checkPossible(TokenType.Word, () => {
+            const word = HelperParser.parse(env, stream, ParserType.Variable)
+            typeDeclareModel.addVariable(word)
+          })
+        }
       }
     }
     model.addTypeDeclaration(typeDeclareModel)
