@@ -6,6 +6,7 @@
   "scripts": {
     "start": "nodemon src/index.js",
     "test": "mocha -r ts-node/register tests/**/*.test.ts",
+    "testMini": "mocha -r ts-node/register tests/**/*.mini.ts",
     "build:ci": "tsc",
     "testWithCoverage": "nyc -r lcov -e .ts -x \"*.test.ts\" mocha -r ts-node/register tests/**/*.test.ts && nyc report"
   },

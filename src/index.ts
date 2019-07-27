@@ -2,7 +2,7 @@ require('dotenv/config');
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const app = require('express')()
-const getModelFromContent = require('./Interpreter/interpretToModel')
+const getModelFromContent = require('./Interpreter/InterpretToModel')
 const lpsolve = require('')
 
 app.use(cors())

@@ -5,11 +5,11 @@ import Environment from './Environment';
 import VariableType from './VariableTypes';
 
 class Constraints {
-  private count: number = 1
+  private count: number = 0
   private map: any = {}
 
   public addConstraint(expression: string) {
-    this.map[`R${this.count++}`] = expression
+    this.map[`R${++this.count}`] = expression
   }
 }
 

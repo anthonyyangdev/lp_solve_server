@@ -1,6 +1,7 @@
 import Tokenizer from './Tokenizer/Tokenizer'
 import Model from '../Models/Model'
 import Parser from '../Parser/Parser'
+import TokenType from './Tokenizer/TokenType'
 
 export default class Eval {
 
@@ -24,7 +25,11 @@ export default class Eval {
     while (stream.hasNext()) {
       let status = this.parseStatement(stream)
       if (status) {
-        continue
+        const isSemiColon = stream.poll().getType() === TokenType.SemiColon
+        if (isSemiColon)
+          continue
+        else
+          throw new Error('Statement does not conclude with semi-colon.')
       } else {
         throw new Error('Error in parsing.')
       }
