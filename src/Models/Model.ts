@@ -5,7 +5,7 @@ import Environment from './Environment';
 import VariableType from './VariableTypes';
 import ObjectiveType from './ObjectiveType'
 import ConstraintModel from './ConstraintModel';
-import StringBuilder from 'src/StringBuilder/StringBuilder';
+import StringBuilder from '../StringBuilder/StringBuilder';
 
 class Constraints {
   private count: number = 0
