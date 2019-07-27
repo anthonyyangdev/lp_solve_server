@@ -10,6 +10,8 @@ export default class GeneralStatementParser {
   static parse(model: Model, stream: Tokenizer): Model {
     const current_type = stream.peek().getType()
     switch (current_type) {
+      case TokenType.Objective:
+        return SpecificParser.parse(model, stream, ParserType.Objective)
       case TokenType.Sum:
         return SpecificParser.parse(model, stream, ParserType.Sum)
       case TokenType.Set:

@@ -3,6 +3,7 @@ import ObjectiveModel from './ObjectiveModel';
 import TypeDeclareModel from './TypeDeclareModel';
 import Environment from './Environment';
 import VariableType from './VariableTypes';
+import ObjectiveType from './ObjectiveType'
 
 class Constraints {
   private count: number = 0
@@ -17,17 +18,18 @@ class Objectives {
   private count: number = 0
   private map: {
     opType: string,
-    expression: string
+    expr: string
   }[]
 
   constructor() {
     this.map = []
   }
 
-  public addConstraint(expression: string) {
+  public addConstraint(type: ObjectiveType, expr: string) {
+    const objectiveType = type === ObjectiveType.max ? 'max' : 'min'
     this.map[this.count++] = {
-      opType: 'max',
-      expression
+      opType: objectiveType,
+      expr
     }
   }
 }
@@ -102,7 +104,8 @@ class Model {
   }
 
   public addObjective(objective: ObjectiveModel) {
-    throw new Error(`Not implemented: ${objective}`)
+    const value = objective.getValues()
+    this.objective.addConstraint(value.name, value.expr)
   }
 
   public addTypeDeclaration(declaration: TypeDeclareModel) {

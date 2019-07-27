@@ -12,7 +12,6 @@ export default class ObjectiveParser implements SpecificParserInterface {
   private expected = [
     TokenType.Objective,
     TokenType.Colon,
-    TokenType.Colon,
     TokenType.Expr,
   ]
 
