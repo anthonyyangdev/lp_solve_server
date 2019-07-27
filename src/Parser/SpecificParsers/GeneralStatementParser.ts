@@ -16,14 +16,13 @@ export default class GeneralStatementParser {
         return SpecificParser.parse(model, stream, ParserType.Sum)
       case TokenType.Set:
         return SpecificParser.parse(model, stream, ParserType.Set)
-      case TokenType.Objective:
-        return SpecificParser.parse(model, stream, ParserType.Objective)
       case TokenType.VariableType:
         return SpecificParser.parse(model, stream, ParserType.TypeDeclare)
       case TokenType.For:
         return SpecificParser.parse(model, stream, ParserType.For)
       default:
-        throw new Error('Tokens do not match')
+        // Assume that the statement is an objective.
+        return SpecificParser.parse(model, stream, ParserType.Constraint)
     }
   }
 

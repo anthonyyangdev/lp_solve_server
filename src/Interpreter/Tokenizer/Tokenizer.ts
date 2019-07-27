@@ -53,6 +53,16 @@ class Tokenizer {
   }
 
   /**
+   * Used for constraint name declaration. True if next two tokens are Word and Colon.
+   * False otherwise.
+   */
+  public nextIsNameDeclare() {
+    const isWord = this.tokens[this.traverselPosition].getType() === TYPES.Word
+    const isColon = this.tokens[this.traverselPosition + 1].getType() === TYPES.Colon
+    return isWord && isColon
+  }
+
+  /**
    * Pops and returns the next token in the token stream. 
    */
   public poll(): Token {

@@ -4,13 +4,22 @@ import TypeDeclareModel from './TypeDeclareModel';
 import Environment from './Environment';
 import VariableType from './VariableTypes';
 import ObjectiveType from './ObjectiveType'
+import ConstraintModel from './ConstraintModel';
 
 class Constraints {
   private count: number = 0
   private map: any = {}
 
-  public addConstraint(expression: string) {
-    this.map[`R${++this.count}`] = expression
+  public addConstraint(expression: string, name?: string) {
+    let constraintName: string = name || `R${++this.count}`
+    let count = 2
+    while (this.map[constraintName] !== undefined) {
+      constraintName = `${constraintName}_${count++}`
+    }
+    this.map[constraintName] = {
+      name: constraintName,
+      expr: expression
+    }
   }
 }
 
@@ -95,18 +104,29 @@ class Model {
     return this.env
   }
 
-  public addRelationConstraint(expr: string) {
-    throw new Error(`Not implemented: ${expr}`)
+  public addConstraint(expr: ConstraintModel) {
+    const values = expr.getValues()
+    if (values.expr.length === 1) {
+      this.constraints.addConstraint(values.expr[0], values.name)
+    } else {
+      this.constraints.addConstraint(values.expr[0], values.name)
+      this.constraints.addConstraint(values.expr[1], values.name)
+    }
   }
 
-  public addRangeConstraint(expr: string) {
-    throw new Error(`Not implemented: ${expr}`)
+  public getConstraint() {
+    return this.constraints
   }
 
   public addObjective(objective: ObjectiveModel) {
     const value = objective.getValues()
     this.objective.addConstraint(value.name, value.expr)
   }
+
+  public getObjective() {
+    return this.objective
+  }
+
 
   public addTypeDeclaration(declaration: TypeDeclareModel) {
     const { type, variables } = declaration.getValues()
