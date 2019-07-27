@@ -18,6 +18,8 @@ export default class GeneralStatementParser {
         return SpecificParser.parse(model, stream, ParserType.Objective)
       case TokenType.VariableType:
         return SpecificParser.parse(model, stream, ParserType.TypeDeclare)
+      case TokenType.For:
+        return SpecificParser.parse(model, stream, ParserType.For)
       default:
         throw new Error('Tokens do not match')
     }
