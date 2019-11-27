@@ -1,6 +1,9 @@
 /**
+ * Removes comments in the input program. Comments come in two types: in-line
+ * and multi-line, whose syntax are respectively // and /**\/
  * 
- * @param program The input program for LPSolver
+ * @param program The input program for LPSolver.
+ * @returns The input program with comments removed.
  */
 function removeComments(program: string): string {
   // Remove in-line comments
