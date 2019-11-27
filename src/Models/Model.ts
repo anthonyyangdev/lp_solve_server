@@ -12,7 +12,8 @@ class Constraints {
   private map: any = {}
 
   public addConstraint(expression: string, name?: string) {
-    let constraintName: string = name || `R${++this.count}`
+    ++this.count
+    let constraintName: string = name || `R${this.count}`
     let count = 2
     while (this.map[constraintName] !== undefined) {
       constraintName = `${constraintName}_${count++}`
@@ -23,7 +24,7 @@ class Constraints {
     }
   }
 
-  public getConstraints() {
+  public getConstraints(): Array<{ name: string, expr: string }> {
     let count = 0
     const arr = []
     for (const name in this.map) {

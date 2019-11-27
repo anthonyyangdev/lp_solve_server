@@ -20,7 +20,7 @@ export default class ConstraintModel extends AbstractModel {
 
   private processRange() {
     if (this.relations.length !== 2) {
-      throw new Error('Cannot parse constraint. Expected to be a range constraint.')
+      throw new Error('Cannot parse constraint. Expected a range constraint.')
     }
     const name = this.name
     const expr1 = `${this.expressions[0]} ${this.relations[0]} ${this.expressions[1]}`
@@ -33,7 +33,7 @@ export default class ConstraintModel extends AbstractModel {
 
   private processRelation() {
     if (this.relations.length !== 1) {
-      throw new Error('Cannot parse constraint. Expected to be a relation constraint.')
+      throw new Error('Cannot parse constraint. Expected a relation constraint.')
     }
     const name = this.name
     const expr = `${this.expressions[0]} ${this.relations[0]} ${this.expressions[1]}`
@@ -52,7 +52,7 @@ export default class ConstraintModel extends AbstractModel {
     } else if (this.expressions.length === 2) {
       return this.processRelation()
     } else {
-      throw new Error('Cannot parse constraint. Incorrect number of constraints')
+      throw new Error(`Cannot parse constraint. Incorrect number of expressions given.`)
     }
   }
 }

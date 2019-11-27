@@ -1,5 +1,7 @@
 enum VariableType {
-  Int, Free, Bin
+  Int = 'Integer',
+  Free = 'Free',
+  Bin = 'Binary'
 }
 
 export default VariableType

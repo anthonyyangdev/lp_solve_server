@@ -1,3 +1,4 @@
+
 function removeComments(input: string): string {
   // Remove in-line comments
   input = input.replace(/\/\/.*/g, '')

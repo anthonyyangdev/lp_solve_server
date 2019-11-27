@@ -5,9 +5,9 @@ import Tokenizer from '../Interpreter/Tokenizer/Tokenizer'
 export default class ParserError {
   public static errorMsg(expected: TokenType, actual: Token, stream: Tokenizer) {
     const positions = stream.getCurrentPosition()
-    const actualLiteral = actual.getLiteral()
+    const actualLiteral = actual.getType()
     const row = positions.line
     const col = positions.column
-    return `Expected ${expected} but encountered ${actualLiteral} at line ${row}, word ${col}`
+    return `Expected ${expected} but encountered ${actualLiteral} at line ${row}, word ${col}: ${actual.getLiteral()}`
   }
 }

@@ -25,7 +25,7 @@ export default class TypeDeclareParser implements SpecificParserInterface {
       if (actualType === expected) {
         closure()
       } else {
-        throw new Error(`Was expecting a ${expected} but received ${actualType} instead.`)
+        throw new Error(`Was expecting ${expected} but found ${actualType} instead.`)
       }
     }
 

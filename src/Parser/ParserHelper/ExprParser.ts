@@ -11,6 +11,7 @@ export default class ExprParser implements HelperParserInterface {
   parse(env: Environment, stream: Tokenizer): string {
     let builder = new StringBuilder()
     let end = false
+    console.trace(true)
     while (!end && stream.hasNext()) {
       const type = stream.peek().getType()
       switch (type) {
@@ -30,13 +31,6 @@ export default class ExprParser implements HelperParserInterface {
           const result = HelperParser.parse(env, stream, ParserType.Sum)
           builder.append(result)
           break
-        // case TokenType.LPAREN:
-        //   stream.pop()
-        //   const expr = HelperParser.parse(env, stream, ParserType.Expression)
-        //   builder.append(expr)
-        //   break
-        // case TokenType.RPAREN:
-        //   stream.pop()
         default:
           end = true
       }

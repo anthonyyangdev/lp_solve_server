@@ -1,5 +1,4 @@
-import { expect } from 'chai';
-import Eval from '../../src/Interpreter/Eval'
+import { expect, assert } from 'chai';
 import Tokenizer from '../../src/Interpreter/Tokenizer/Tokenizer';
 import HelperParser from '../../src/Parser/ParserHelper/HelperParserImpl'
 import 'mocha'

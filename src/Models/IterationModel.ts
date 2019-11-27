@@ -1,6 +1,7 @@
 import AbstractModel from "./AbstractModel";
 import TokenType from '../Interpreter/Tokenizer/TokenType'
 import Environment from "./Environment";
+import Token from "src/Interpreter/Tokenizer/Token";
 const mathjs = require('mathjs')
 
 class IterationModel extends AbstractModel {

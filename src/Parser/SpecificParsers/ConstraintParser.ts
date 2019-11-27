@@ -33,6 +33,12 @@ export default class ConstraintParser implements SpecificParserInterface {
           // Assume it is an expression
           const env = model.getEnvironment()
           const expr = Parser.parse(env, stream, ParserType.Expression)
+          if (expr.length === 0) {
+            const pos = stream.getCurrentPosition()
+            const row = pos.line
+            const col = pos.column
+            throw new Error(`Line ${row}, Token ${col}: Unable to get expression.`)
+          }
           constraintModel.addExpression(expr)
           break
       }

@@ -1,5 +1,7 @@
 enum ObjectiveType {
-  none, max, min
+  none,
+  max = 'Max',
+  min = 'Min'
 }
 
 export default ObjectiveType
