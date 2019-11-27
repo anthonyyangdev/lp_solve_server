@@ -9,7 +9,8 @@
 function toArray(program: string): Array<string> {
   const DELIMIT = ';'
 
-  let statements: string[] = program.split(DELIMIT)
+  let statements: string[] = program
+    .split(DELIMIT)
     .map(x => x.trim())
   const lastIndex: string = statements.pop() || ''
   if (!/\s*/.test(lastIndex)) {
