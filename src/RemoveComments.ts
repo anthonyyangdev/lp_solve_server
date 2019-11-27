@@ -1,19 +1,22 @@
-
-function removeComments(input: string): string {
+/**
+ * 
+ * @param program The input program for LPSolver
+ */
+function removeComments(program: string): string {
   // Remove in-line comments
-  input = input.replace(/\/\/.*/g, '')
+  program = program.replace(/\/\/.*/g, '')
 
   // Remove multi-line comments
   const DELIMIT = '/*'
   const ENDING = '*/'
-  let index = input.indexOf(DELIMIT)
+  let index = program.indexOf(DELIMIT)
   const LEN = ENDING.length
   while (index >= 0) {
-    let secondIndex = input.indexOf(ENDING)
-    input = `${input.slice(0, index)}${input.slice(secondIndex + LEN)}`
-    index = input.indexOf(DELIMIT)
+    let secondIndex = program.indexOf(ENDING)
+    program = `${program.slice(0, index)}${program.slice(secondIndex + LEN)}`
+    index = program.indexOf(DELIMIT)
   }
-  return input
+  return program
 }
 
 export default removeComments
