@@ -366,12 +366,31 @@ class Eval {
     return model
   }
 }
+
+import StatementType from './StatementTypes'
+function getStatementType(statement: string): StatementType {
+  /** 
+   * Returns an enum representing the type of statement
+   * 1) Objective
+   * 2) Constraint
+   * 3) VariableSet
+   * 4) For
+   * 5) Sum
+   * 
+   * More types can be added to expand.
+   * 
+   * */
+  return StatementType.Objective
+}
+
 function parseStatement(statement: string) {
-  
+  const statementType = getStatementType(statement)
+
 }
 
 import removeComments from '../RemoveComments'
 import toStatements from '../ToArray/toArray'
+import ObjectiveType from 'src/Models/ObjectiveType'
 
 export default function parseProgram(program: string) {
   program = removeComments(program)
