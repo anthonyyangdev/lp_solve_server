@@ -1,7 +1,7 @@
 enum StatementType {
   Objective = "Objective",
   Constraint = "Constraint",
-  VariableSet = "Set",
+  VariableSet = "Let",
   For = "For",
   Sum = "Sum"
 }

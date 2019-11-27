@@ -390,7 +390,6 @@ function parseStatement(statement: string) {
 
 import removeComments from '../RemoveComments'
 import toStatements from '../ToArray/toArray'
-import ObjectiveType from 'src/Models/ObjectiveType'
 
 export default function parseProgram(program: string) {
   program = removeComments(program)
