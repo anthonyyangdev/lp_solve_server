@@ -9,7 +9,7 @@ class StringBuilder {
 
   /**
    * Adds {str} to the StringBuilder instance.
-   * @param str Any sized-length string
+   * @param str A string of any size.
    */
   public append(str: string) {
     for (let i = 0; i < str.length; i++) {
